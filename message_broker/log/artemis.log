@@ -1,0 +1,20 @@
+19:06:19,093 INFO  [org.apache.activemq.artemis.integration.bootstrap] AMQ101000: Starting ActiveMQ Artemis Server
+19:06:19,174 INFO  [org.apache.activemq.artemis.core.server] AMQ221000: live Message Broker is starting with configuration Broker Configuration (clustered=false,journalDirectory=./data/journal,bindingsDirectory=./data/bindings,largeMessagesDirectory=./data/large-messages,pagingDirectory=./data/paging)
+19:06:19,259 INFO  [org.apache.activemq.artemis.core.server] AMQ221012: Using AIO Journal
+19:06:19,380 INFO  [org.apache.activemq.artemis.core.server] AMQ221043: Protocol module found: [artemis-server]. Adding protocol support for: CORE
+19:06:19,392 INFO  [org.apache.activemq.artemis.core.server] AMQ221043: Protocol module found: [artemis-amqp-protocol]. Adding protocol support for: AMQP
+19:06:19,438 INFO  [org.apache.activemq.artemis.core.server] AMQ221043: Protocol module found: [artemis-hornetq-protocol]. Adding protocol support for: HORNETQ
+19:06:19,445 INFO  [org.apache.activemq.artemis.core.server] AMQ221043: Protocol module found: [artemis-mqtt-protocol]. Adding protocol support for: MQTT
+19:06:19,458 INFO  [org.apache.activemq.artemis.core.server] AMQ221043: Protocol module found: [artemis-openwire-protocol]. Adding protocol support for: OPENWIRE
+19:06:19,615 INFO  [org.apache.activemq.artemis.core.server] AMQ221043: Protocol module found: [artemis-stomp-protocol]. Adding protocol support for: STOMP
+19:06:19,916 INFO  [org.apache.activemq.artemis.core.server] AMQ221003: Trying to deploy queue jms.queue.DLQ
+19:06:20,024 INFO  [org.apache.activemq.artemis.core.server] AMQ221003: Trying to deploy queue jms.queue.ExpiryQueue
+19:06:20,221 INFO  [org.apache.activemq.artemis.core.server] AMQ221020: Started Acceptor at 0.0.0.0:61616 for protocols [CORE,MQTT,AMQP,HORNETQ,STOMP,OPENWIRE]
+19:06:20,233 INFO  [org.apache.activemq.artemis.core.server] AMQ221020: Started Acceptor at 0.0.0.0:5445 for protocols [HORNETQ,STOMP]
+19:06:20,236 INFO  [org.apache.activemq.artemis.core.server] AMQ221020: Started Acceptor at 0.0.0.0:5672 for protocols [AMQP]
+19:06:20,238 INFO  [org.apache.activemq.artemis.core.server] AMQ221020: Started Acceptor at 0.0.0.0:1883 for protocols [MQTT]
+19:06:20,251 INFO  [org.apache.activemq.artemis.core.server] AMQ221020: Started Acceptor at 0.0.0.0:61613 for protocols [STOMP]
+19:06:20,251 INFO  [org.apache.activemq.artemis.core.server] AMQ221007: Server is now live
+19:06:20,252 INFO  [org.apache.activemq.artemis.core.server] AMQ221001: Apache ActiveMQ Artemis Message Broker version 1.2.0 [0.0.0.0, nodeID=d0ba771c-2ff6-11e6-bc26-94659c6ad6a5] 
+19:06:20,908 INFO  [org.apache.activemq.artemis] AMQ241001: HTTP Server started at http://localhost:8161
+19:06:20,910 INFO  [org.apache.activemq.artemis] AMQ241002: Artemis Jolokia REST API available at http://localhost:8161/jolokia
