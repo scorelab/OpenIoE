@@ -1,0 +1,36 @@
+{
+  "relationships": [
+    {
+      "relationshipId": 1,
+      "relationshipName": "device",
+      "otherEntityName": "device",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipId": 2,
+      "relationshipName": "sensor",
+      "otherEntityName": "sensor",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipId": 3,
+      "relationshipName": "user",
+      "otherEntityName": "user",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
+    }
+  ],
+  "fields": [
+    {
+      "fieldId": 1,
+      "fieldName": "subscriptionId",
+      "fieldType": "Long"
+    }
+  ],
+  "changelogDate": "20160605135943",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no"
+}

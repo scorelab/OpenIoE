@@ -1,0 +1,31 @@
+{
+    "ioeApp": {
+        "sensor" : {
+            "home": {
+                "title": "Sensors",
+                "createLabel": "Create a new Sensor",
+                "createOrEditLabel": "Create or edit a Sensor",
+                "search": "Search for Sensor"
+            },
+            "created": "A new Sensor is created with identifier {{ param }}",
+            "updated": "A Sensor is updated with identifier {{ param }}",
+            "deleted": "A Sensor is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Sensor {{ id }}?"
+            },
+            "detail": {
+                "title": "Sensor"
+            },
+            "sensorId": "Sensor Id",
+            "name": "Name",
+            "description": "Description",
+            "type": "Type",
+            "serial": "Serial",
+            "storeType": "Store Type",
+            "tableId": "Table Id",
+            "device": "Device",
+            "subscription": "Subscription",
+            "user": "User"
+        }
+    }
+}

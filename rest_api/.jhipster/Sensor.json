@@ -1,0 +1,69 @@
+{
+  "relationships": [
+    {
+      "relationshipId": 1,
+      "relationshipName": "device",
+      "otherEntityName": "device",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipId": 2,
+      "relationshipName": "subscription",
+      "otherEntityName": "subscription",
+      "relationshipType": "one-to-many",
+      "otherEntityRelationshipName": "sensor"
+    },
+    {
+      "relationshipId": 3,
+      "relationshipName": "user",
+      "otherEntityName": "user",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
+    }
+  ],
+  "fields": [
+    {
+      "fieldId": 1,
+      "fieldName": "sensorId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldId": 2,
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldId": 3,
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldId": 4,
+      "fieldName": "type",
+      "fieldType": "String"
+    },
+    {
+      "fieldId": 5,
+      "fieldName": "serial",
+      "fieldType": "String"
+    },
+    {
+      "fieldId": 6,
+      "fieldName": "storeType",
+      "fieldType": "String"
+    },
+    {
+      "fieldId": 7,
+      "fieldName": "tableId",
+      "fieldType": "String"
+    }
+  ],
+  "changelogDate": "20160605135942",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no"
+}
