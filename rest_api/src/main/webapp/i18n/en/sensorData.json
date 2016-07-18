@@ -1,0 +1,25 @@
+{
+    "ioeApp": {
+        "sensorData" : {
+            "home": {
+                "title": "Sensor Data",
+                "createLabel": "Create a new Sensor Data",
+                "createOrEditLabel": "Create or edit a Sensor Data",
+                "search": "Search for Sensor Data"
+            },
+            "created": "A new Sensor Data is created with identifier {{ param }}",
+            "updated": "A Sensor Data is updated with identifier {{ param }}",
+            "deleted": "A Sensor Data is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Sensor Data {{ id }}?"
+            },
+            "detail": {
+                "title": "Sensor Data"
+            },
+            "sensorId": "Sensor Id",
+            "data": "Data",
+            "description": "Description",
+            "timestamp": "Timestamp"
+        }
+    }
+}

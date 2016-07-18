@@ -18,3 +18,4 @@
 19:06:20,252 INFO  [org.apache.activemq.artemis.core.server] AMQ221001: Apache ActiveMQ Artemis Message Broker version 1.2.0 [0.0.0.0, nodeID=d0ba771c-2ff6-11e6-bc26-94659c6ad6a5] 
 19:06:20,908 INFO  [org.apache.activemq.artemis] AMQ241001: HTTP Server started at http://localhost:8161
 19:06:20,910 INFO  [org.apache.activemq.artemis] AMQ241002: Artemis Jolokia REST API available at http://localhost:8161/jolokia
+19:20:12,547 INFO  [org.apache.activemq.artemis.core.server] AMQ221002: Apache ActiveMQ Artemis Message Broker version 1.2.0 [d0ba771c-2ff6-11e6-bc26-94659c6ad6a5] stopped, uptime 13 minutes
