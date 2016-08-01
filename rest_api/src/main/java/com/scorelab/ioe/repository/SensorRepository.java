@@ -14,5 +14,6 @@ public interface SensorRepository extends JpaRepository<Sensor,Long> {
 
     @Query("select sensor from Sensor sensor where sensor.user.login = ?#{principal.username}")
     List<Sensor> findByUserIsCurrentUser();
+    Sensor findBySensorId(Long sensorId);
 
 }

@@ -1,7 +1,10 @@
 package com.scorelab.ioe.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.datastax.driver.core.Row;
+import com.google.common.base.Strings;
 import com.scorelab.ioe.config.CassandraConfiguration;
+import com.scorelab.ioe.domain.Device;
 import com.scorelab.ioe.domain.Sensor;
 import com.scorelab.ioe.domain.SensorData;
 import com.scorelab.ioe.nosql.StoreTypes;
@@ -21,9 +24,12 @@ import javax.inject.Inject;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.*;
 
 /**
  * REST controller for managing Sensor.
@@ -138,6 +144,9 @@ public class SensorResource {
     public ResponseEntity<Void> deleteSensor(@PathVariable Long id) {
         log.debug("REST request to delete Sensor : {}", id);
         sensorRepository.delete(id);
+
+        // TODO - Clear up the sensor data?
+
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("sensor", id.toString())).build();
     }
 
@@ -154,13 +163,18 @@ public class SensorResource {
     public void insertSensorPayload(@Valid @RequestBody SensorData sensorData) {
         ApplicationContext ctx =
             new AnnotationConfigApplicationContext(CassandraConfiguration.class);
+
         CassandraConfiguration cc = ctx.getBean(CassandraConfiguration.class);
-        Date date = Date.from(sensorData.getTimestamp().toInstant());
-        cc.insertData(sensorData.getSensorId(), sensorData.getData(), sensorData.getDescription(), date, StoreTypes.NORMAL, 0);
+        ZonedDateTime utcTime = sensorData.getTimestamp().withZoneSameInstant(ZoneOffset.UTC);
+
+        Sensor sensor = sensorRepository.findBySensorId(sensorData.getSensorId());
+        // TODO - Read TTL value
+        cc.insertData(sensorData.getSensorId(), sensorData.getData(), sensorData.getDescription(), utcTime, StoreTypes.valueOf(sensor.getStoreType()), 0);
     }
 
     /**
      * GET /sensors/:id
+     * Return all sensor data
      *
      * @param id of the sensor to insert payload
      * @throws URISyntaxException if the Location URI syntax is incorrect
@@ -169,9 +183,45 @@ public class SensorResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public void GetSensorPayload(@PathVariable Long id) {
+    public List<String> GetSensorPayload(@PathVariable Long id) {
         ApplicationContext ctx =
             new AnnotationConfigApplicationContext(CassandraConfiguration.class);
         CassandraConfiguration cc = ctx.getBean(CassandraConfiguration.class);
+
+        return cc.readData(id);
+    }
+
+    /**
+     * GET /sensors/:id/data
+     * Return all sensor data by given dates
+     *
+     * @param id of the sensor to insert payload
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @RequestMapping(value = "/sensors/{id}/data",
+        method = RequestMethod.GET,
+        params = "dates",
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public List<String> GetSensorPayloadByDate(@PathVariable Long id, @RequestParam("dates") String dates) {
+        ApplicationContext ctx =
+            new AnnotationConfigApplicationContext(CassandraConfiguration.class);
+        CassandraConfiguration cc = ctx.getBean(CassandraConfiguration.class);
+
+        if (Strings.isNullOrEmpty(dates)) {
+            return null;
+        }
+
+        List<LocalDate> dateTimeList = new ArrayList<>();
+        String[] dateArr = dates.split(",");
+        for (String date :
+            dateArr) {
+            try {
+                dateTimeList.add(LocalDate.parse(date));
+            } catch (DateTimeParseException ex) {
+            }
+        }
+
+        return cc.readData(id, dateTimeList);
     }
 }
