@@ -1,20 +1,16 @@
 package com.scorelab.ioe.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.datastax.driver.core.Row;
 import com.google.common.base.Strings;
-import com.scorelab.ioe.config.CassandraConfiguration;
-import com.scorelab.ioe.domain.Device;
 import com.scorelab.ioe.domain.Sensor;
 import com.scorelab.ioe.domain.SensorData;
 import com.scorelab.ioe.nosql.StoreTypes;
 import com.scorelab.ioe.repository.SensorRepository;
+import com.scorelab.ioe.service.noSqlRepositoryService;
 import com.scorelab.ioe.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.http.HttpHeaders;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +23,10 @@ import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * REST controller for managing Sensor.
@@ -42,6 +39,9 @@ public class SensorResource {
 
     @Inject
     private SensorRepository sensorRepository;
+
+    @Autowired
+    private noSqlRepositoryService databaseService;
 
     /**
      * POST  /sensors : Create a new sensor.
@@ -61,11 +61,7 @@ public class SensorResource {
         }
         Sensor result = sensorRepository.save(sensor);
 
-        ApplicationContext ctx =
-            new AnnotationConfigApplicationContext(CassandraConfiguration.class);
-        CassandraConfiguration cc = ctx.getBean(CassandraConfiguration.class);
-        cc.createSensorTable(result.getSensorId(), StoreTypes.valueOf(result.getStoreType()));
-
+        databaseService.createSensorTable(result.getSensorId(), StoreTypes.valueOf(result.getStoreType()));
 
         return ResponseEntity.created(new URI("/api/sensors/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("sensor", result.getId().toString()))
@@ -161,15 +157,11 @@ public class SensorResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public void insertSensorPayload(@Valid @RequestBody SensorData sensorData) {
-        ApplicationContext ctx =
-            new AnnotationConfigApplicationContext(CassandraConfiguration.class);
-
-        CassandraConfiguration cc = ctx.getBean(CassandraConfiguration.class);
         ZonedDateTime utcTime = sensorData.getTimestamp().withZoneSameInstant(ZoneOffset.UTC);
 
         Sensor sensor = sensorRepository.findBySensorId(sensorData.getSensorId());
         // TODO - Read TTL value
-        cc.insertData(sensorData.getSensorId(), sensorData.getData(), sensorData.getDescription(), utcTime, StoreTypes.valueOf(sensor.getStoreType()), 0);
+        databaseService.insertData(sensorData.getSensorId(), sensorData.getData(), sensorData.getDescription(), utcTime, StoreTypes.valueOf(sensor.getStoreType()), 0);
     }
 
     /**
@@ -184,11 +176,7 @@ public class SensorResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public List<String> GetSensorPayload(@PathVariable Long id) {
-        ApplicationContext ctx =
-            new AnnotationConfigApplicationContext(CassandraConfiguration.class);
-        CassandraConfiguration cc = ctx.getBean(CassandraConfiguration.class);
-
-        return cc.readData(id);
+        return databaseService.readData(id);
     }
 
     /**
@@ -204,10 +192,6 @@ public class SensorResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public List<String> GetSensorPayloadByDate(@PathVariable Long id, @RequestParam("dates") String dates) {
-        ApplicationContext ctx =
-            new AnnotationConfigApplicationContext(CassandraConfiguration.class);
-        CassandraConfiguration cc = ctx.getBean(CassandraConfiguration.class);
-
         if (Strings.isNullOrEmpty(dates)) {
             return null;
         }
@@ -222,6 +206,6 @@ public class SensorResource {
             }
         }
 
-        return cc.readData(id, dateTimeList);
+        return databaseService.readData(id, dateTimeList);
     }
 }

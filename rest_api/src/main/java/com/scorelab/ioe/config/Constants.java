@@ -21,12 +21,6 @@ public final class Constants {
 
     public static final String SYSTEM_ACCOUNT = "system";
 
-    // TODO - Move to config files
-    public static final String CASSANDRA_URL = "127.0.0.1";
-    public static final String CASSANDRA_KEYSPACE = "ioe";
-    public static final String QUEUE_NAME = "ioeQueue";
-    public static final String QUEUE_URL = "tcp://localhost:61616";
-
     private Constants() {
     }
 }

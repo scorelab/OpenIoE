@@ -1,55 +1,52 @@
-package com.scorelab.ioe.config;
+package com.scorelab.ioe.service;
 
 import com.datastax.driver.core.*;
 import com.datastax.driver.core.policies.DefaultRetryPolicy;
-import com.datastax.driver.core.querybuilder.Clause;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
-import com.datastax.driver.core.querybuilder.Select;
 import com.google.common.base.Functions;
 import com.google.common.collect.Lists;
-import com.scorelab.ioe.domain.util.JSR310PersistenceConverters;
+import com.scorelab.ioe.config.IoeConfiguration;
 import com.scorelab.ioe.nosql.StoreTypes;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.time.*;
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.datastax.driver.core.querybuilder.QueryBuilder.*;
+import static com.datastax.driver.core.querybuilder.QueryBuilder.in;
+import static com.datastax.driver.core.querybuilder.QueryBuilder.ttl;
 
 /**
- * Created by tharidu on 6/14/16.
+ * Created by tharidu on 8/8/16.
  */
 
 @Service
-public class CassandraConfiguration {
+public class CassandraService implements noSqlRepositoryService {
     private Cluster cluster;
     private Session session;
 
-    public CassandraConfiguration() {
-        connect();
-    }
+    @Inject
+    private IoeConfiguration ioeConfiguration;
 
-    //    @Autowired
+    @PostConstruct
+    @Override
     public void connect() {
-        cluster = Cluster.builder().addContactPoint(Constants.CASSANDRA_URL).withRetryPolicy(DefaultRetryPolicy.INSTANCE).build();
-        session = cluster.connect(Constants.CASSANDRA_KEYSPACE);
+        cluster = Cluster.builder().addContactPoint(ioeConfiguration.getCassandra().getCassandraUrl()).withRetryPolicy(DefaultRetryPolicy.INSTANCE).build();
+        session = cluster.connect(ioeConfiguration.getCassandra().getCassandraKeyspace());
     }
 
-    //    @Autowired
+    @Override
     public void createSensorTable(Long sensorId, StoreTypes storeType) {
         String tableName = returnSensorTableName(sensorId);
 
         if (storeType.equals(StoreTypes.NORMAL)) {
             session.execute(
-                "CREATE TABLE " + Constants.CASSANDRA_KEYSPACE + "." + tableName + " (" +
+                "CREATE TABLE " + ioeConfiguration.getCassandra().getCassandraKeyspace() + "." + tableName + " (" +
                     "date text," +
                     "event_time timestamp," +
                     "value text," +
@@ -58,7 +55,7 @@ public class CassandraConfiguration {
                     ");");
         } else {
             session.execute(
-                "CREATE TABLE " + Constants.CASSANDRA_KEYSPACE + "." + tableName + " (" +
+                "CREATE TABLE " + ioeConfiguration.getCassandra().getCassandraKeyspace() + "." + tableName + " (" +
                     "event_time timestamp," +
                     "value text," +
                     "description text," +
@@ -67,21 +64,21 @@ public class CassandraConfiguration {
         }
     }
 
-    //    @Autowired
+    @Override
     public void insertData(Long sensorId, String data, String description, ZonedDateTime timestamp, StoreTypes storeType, int ttlValue) {
         String tableName = returnSensorTableName(sensorId);
         String date = timestamp.format(DateTimeFormatter.ISO_LOCAL_DATE);
         Date utcTimestamp = Date.from(timestamp.toInstant());
 
         if (storeType.equals(StoreTypes.NORMAL)) {
-            Statement statement = QueryBuilder.insertInto(Constants.CASSANDRA_KEYSPACE, tableName)
+            Statement statement = QueryBuilder.insertInto(ioeConfiguration.getCassandra().getCassandraKeyspace(), tableName)
                 .value("date", date)
                 .value("event_time", utcTimestamp)
                 .value("value", data)
                 .value("description", description);
             session.execute(statement);
         } else {
-            Statement statement = QueryBuilder.insertInto(Constants.CASSANDRA_KEYSPACE, tableName)
+            Statement statement = QueryBuilder.insertInto(ioeConfiguration.getCassandra().getCassandraKeyspace(), tableName)
                 .value("date", date)
                 .value("event_time", utcTimestamp)
                 .value("value", data)
@@ -91,6 +88,7 @@ public class CassandraConfiguration {
         }
     }
 
+    @Override
     public List<String> readData(Long sensorId) {
         String tableName = returnSensorTableName(sensorId);
         List<String> results = new ArrayList<>();
@@ -98,7 +96,7 @@ public class CassandraConfiguration {
         Statement statement = QueryBuilder
             .select()
             .raw("JSON *")
-            .from(Constants.CASSANDRA_KEYSPACE, tableName);
+            .from(ioeConfiguration.getCassandra().getCassandraKeyspace(), tableName);
         ResultSet rs = session.execute(statement);
 
 
@@ -109,6 +107,7 @@ public class CassandraConfiguration {
         return results;
     }
 
+    @Override
     public List<String> readData(Long sensorId, List<LocalDate> dates) {
         String tableName = returnSensorTableName(sensorId);
         List<String> results = new ArrayList<>();
@@ -116,7 +115,7 @@ public class CassandraConfiguration {
         Statement statement = QueryBuilder
             .select()
             .raw("JSON *")
-            .from(Constants.CASSANDRA_KEYSPACE, tableName)
+            .from(ioeConfiguration.getCassandra().getCassandraKeyspace(), tableName)
             .where(in("date", Lists.transform(dates, Functions.toStringFunction())));
         ResultSet rs = session.execute(statement);
 
@@ -127,7 +126,7 @@ public class CassandraConfiguration {
         return results;
     }
 
-    public String returnSensorTableName(Long sensorId) {
+    private String returnSensorTableName(Long sensorId) {
         return "data_".concat(String.valueOf(sensorId));
     }
 }

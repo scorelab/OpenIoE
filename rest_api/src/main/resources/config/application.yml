@@ -73,3 +73,16 @@ jhipster:
     ribbon:
         # comma seperated list of profiles to show a ribbon on the GUI
         displayOnActiveProfiles: dev
+
+# ===================================================================
+# IOE specific properties
+# ===================================================================
+
+ioe:
+    cassandra:
+        cassandraUrl: 127.0.0.1
+        cassandraKeyspace: ioe
+    queue:
+        queueName: ioeQueue
+        queueUrl: tcp://localhost:61616
+        mqttUrl: tcp://localhost:61616
