@@ -1,8 +1,10 @@
 package com.scorelab.ioe.broker;
 
 import com.scorelab.ioe.config.Constants;
+import com.scorelab.ioe.config.IoeConfiguration;
 import org.fusesource.mqtt.client.BlockingConnection;
 import org.fusesource.mqtt.client.MQTT;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.URISyntaxException;
 
@@ -11,9 +13,12 @@ import java.net.URISyntaxException;
  */
 public class MqttConsumerThread {
 
+    @Autowired
+    private IoeConfiguration ioeConfiguration;
+
     public void StartBrokerConsumer() throws Exception {
         MQTT mqtt = new MQTT();
-        mqtt.setHost(Constants.MQTT_URL);
+        mqtt.setHost(ioeConfiguration.getQueue().getMqttUrl());
         BlockingConnection connection = mqtt.blockingConnection();
         connection.connect();
 

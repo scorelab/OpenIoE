@@ -4,7 +4,7 @@ import javax.jms.*;
 
 import com.scorelab.ioe.config.IoeConfiguration;
 import com.scorelab.ioe.repository.SensorRepository;
-import com.scorelab.ioe.service.noSqlRepositoryService;
+import com.scorelab.ioe.service.SensorDataRepositoryService;
 import org.apache.activemq.artemis.api.jms.ActiveMQJMSClient;
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 
@@ -28,10 +28,10 @@ public class BrokerConsumerThread implements Runnable {
 //    }
 
     private SensorRepository sensorRepository;
-    private noSqlRepositoryService databaseService;
+    private SensorDataRepositoryService databaseService;
     private IoeConfiguration ioeConfiguration;
 
-    public BrokerConsumerThread(SensorRepository sensorRepository, noSqlRepositoryService databaseService, IoeConfiguration ioeConfiguration) {
+    public BrokerConsumerThread(SensorRepository sensorRepository, SensorDataRepositoryService databaseService, IoeConfiguration ioeConfiguration) {
         this.sensorRepository = sensorRepository;
         this.databaseService = databaseService;
         this.ioeConfiguration = ioeConfiguration;

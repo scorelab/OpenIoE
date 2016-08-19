@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by tharidu on 8/8/16.
  */
-public interface noSqlRepositoryService {
+public interface SensorDataRepositoryService {
 
     public void connect();
 

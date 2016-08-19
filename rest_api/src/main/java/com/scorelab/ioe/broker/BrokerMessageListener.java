@@ -9,7 +9,7 @@ import com.scorelab.ioe.domain.Sensor;
 import com.scorelab.ioe.domain.SensorData;
 import com.scorelab.ioe.nosql.StoreTypes;
 import com.scorelab.ioe.repository.SensorRepository;
-import com.scorelab.ioe.service.noSqlRepositoryService;
+import com.scorelab.ioe.service.SensorDataRepositoryService;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -26,9 +26,9 @@ public class BrokerMessageListener implements MessageListener {
 
     private Gson gson;
     private SensorRepository sensorRepository;
-    private noSqlRepositoryService databaseService;
+    private SensorDataRepositoryService databaseService;
 
-    public BrokerMessageListener(SensorRepository sensorRepository, noSqlRepositoryService databaseService) {
+    public BrokerMessageListener(SensorRepository sensorRepository, SensorDataRepositoryService databaseService) {
         this.sensorRepository = sensorRepository;
         this.databaseService = databaseService;
         gson = Converters.registerAll(new GsonBuilder()).create();

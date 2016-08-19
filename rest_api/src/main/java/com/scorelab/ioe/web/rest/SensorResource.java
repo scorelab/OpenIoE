@@ -6,7 +6,7 @@ import com.scorelab.ioe.domain.Sensor;
 import com.scorelab.ioe.domain.SensorData;
 import com.scorelab.ioe.nosql.StoreTypes;
 import com.scorelab.ioe.repository.SensorRepository;
-import com.scorelab.ioe.service.noSqlRepositoryService;
+import com.scorelab.ioe.service.SensorDataRepositoryService;
 import com.scorelab.ioe.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +41,7 @@ public class SensorResource {
     private SensorRepository sensorRepository;
 
     @Autowired
-    private noSqlRepositoryService databaseService;
+    private SensorDataRepositoryService databaseService;
 
     /**
      * POST  /sensors : Create a new sensor.

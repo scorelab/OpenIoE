@@ -26,7 +26,7 @@ import static com.datastax.driver.core.querybuilder.QueryBuilder.ttl;
  */
 
 @Service
-public class CassandraService implements noSqlRepositoryService {
+public class CassandraService implements SensorDataRepositoryService {
     private Cluster cluster;
     private Session session;
 
