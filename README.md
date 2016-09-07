@@ -8,6 +8,11 @@ Open-source middleware platform for building, managing, and integrating connecte
  - NoSQL data storage for sensor data (Cassandra)
  - Support for timeline series modelling
 
+# Docker
+ - All the services required to run the platform can be easily started via bundled docker-compose.yml located in rest_api/src/main/docker
+ - Browse to rest_api/src/main/docker and run `docker-compose up -d`
+ - Open 127.0.0.1 in the web browser where you can configure a user account and create devices and sensors
+
 # Installation
  - Clone the Github repository
  - Install and configure Cassandra (http://cassandra.apache.org/doc/latest/getting_started/installing.html)
