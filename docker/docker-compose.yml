@@ -1,5 +1,5 @@
 restapi:
-  image: "jhipster/jhipster:3.4.0"
+  build: ./rest_api
 broker:
   image: "vromero/activemq-artemis:1.2.0"
 cassandra:

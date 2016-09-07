@@ -6,7 +6,7 @@ services:
         # volumes:
         #     - ~/volumes/jhipster/ioe/mysql/:/var/lib/mysql/
         environment:
-            - MYSQL_USER=root
+            - MYSQL_USER=ioe
             - MYSQL_ALLOW_EMPTY_PASSWORD=yes
             - MYSQL_DATABASE=ioe
         ports:

@@ -23,6 +23,16 @@ public class IoeConfiguration {
     public static class Cassandra {
         private String cassandraUrl;
         private String cassandraKeyspace = "ioe";
+        private String strategy = "SimpleStrategy";
+        private String replicationFactor = "1";
+
+        public String getStrategy() { return strategy; }
+
+        public void setStrategy(String strategy) { this.strategy = strategy; }
+
+        public String getReplicationFactor() { return replicationFactor; }
+
+        public void setReplicationFactor(String replicationFactor) { this.replicationFactor = replicationFactor; }
 
         public String getCassandraUrl() {
             return cassandraUrl;
@@ -45,6 +55,8 @@ public class IoeConfiguration {
         private String queueName = "ioeQueue";
         private String queueUrl = "tcp://localhost:61616";
         private String mqttUrl = "tcp://localhost:61616";
+        private String username;
+        private String password;
 
         public String getQueueName() {
             return queueName;
@@ -69,5 +81,13 @@ public class IoeConfiguration {
         public void setMqttUrl(String mqttUrl) {
             this.mqttUrl = mqttUrl;
         }
+
+        public String getUsername() { return username; }
+
+        public void setUsername(String username) { this.username = username; }
+
+        public String getPassword() { return password; }
+
+        public void setPassword(String password) { this.password = password; }
     }
 }

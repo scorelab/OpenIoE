@@ -45,7 +45,7 @@ public class BrokerConsumerThread implements Runnable {
         try {
             Queue queue = ActiveMQJMSClient.createQueue(ioeConfiguration.getQueue().getQueueName());
             ConnectionFactory cf = new ActiveMQConnectionFactory(ioeConfiguration.getQueue().getQueueUrl());
-            connection = cf.createConnection();
+            connection = cf.createConnection(ioeConfiguration.getQueue().getUsername(), ioeConfiguration.getQueue().getPassword());
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
             MessageConsumer messageConsumer = session.createConsumer(queue);
             messageConsumer.setMessageListener(new BrokerMessageListener(sensorRepository, databaseService));

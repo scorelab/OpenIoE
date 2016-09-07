@@ -37,7 +37,15 @@ public class CassandraService implements SensorDataRepositoryService {
     @Override
     public void connect() {
         cluster = Cluster.builder().addContactPoint(ioeConfiguration.getCassandra().getCassandraUrl()).withRetryPolicy(DefaultRetryPolicy.INSTANCE).build();
-        session = cluster.connect(ioeConfiguration.getCassandra().getCassandraKeyspace());
+
+        session = cluster.connect();
+        session.execute("CREATE KEYSPACE IF NOT EXISTS " + ioeConfiguration.getCassandra().getCassandraKeyspace() + " WITH replication = {"
+            + " 'class': '" + ioeConfiguration.getCassandra().getStrategy() + "', "
+            + " 'replication_factor': '" + ioeConfiguration.getCassandra().getReplicationFactor() + "' "
+            + "};");
+        session.execute("USE " + ioeConfiguration.getCassandra().getCassandraKeyspace());
+
+//        session = cluster.connect(ioeConfiguration.getCassandra().getCassandraKeyspace());
     }
 
     @Override

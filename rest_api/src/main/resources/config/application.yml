@@ -80,9 +80,13 @@ jhipster:
 
 ioe:
     cassandra:
-        cassandraUrl: 127.0.0.1
+        cassandraUrl: cassandra
         cassandraKeyspace: ioe
+        strategy: SimpleStrategy
+        replicationFactor: 1
     queue:
         queueName: ioeQueue
-        queueUrl: tcp://localhost:61616
-        mqttUrl: tcp://localhost:61616
+        queueUrl: tcp://broker:61616
+        mqttUrl: tcp://broker:61616
+        username: artemis
+        password: simetraehcapa
