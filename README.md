@@ -12,6 +12,8 @@ Open-source middleware platform for building, managing, and integrating connecte
  - All the services required to run the platform can be easily started via bundled docker-compose.yml located in rest_api/src/main/docker
  - Browse to rest_api/src/main/docker and run `docker-compose up -d`
  - Open 127.0.0.1 in the web browser where you can configure a user account and create devices and sensors
+ - To stop the platform, run `docker-compose stop` in the same folder as above
+ - Logs can be observed via `docker-compose logs [CONTAINER]` (ex: ioe-app)
 
 # Installation
  - Clone the Github repository
