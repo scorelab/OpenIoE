@@ -18,12 +18,12 @@ Open-source middleware platform for building, managing, and integrating connecte
 # Installation
  - Clone the Github repository
  - Install and configure Cassandra (http://cassandra.apache.org/doc/latest/getting_started/installing.html)
- - Configure 'ioe' section in application.yml that can be found in rest_api/src/main/resources/config
+ - Configure 'ioe' section in application.yml that can be found in rest_api/src/main/resources/config. Set cassandraUrl to localhost.
 
 # Usage
- - Make sure Cassandra server is up
- - Run Artemis message broker in a terminal using executable in /message_broker/bin
- - Run Spring Boot backend by 'gradlew' executable in /rest_api
+ - Make sure Cassandra server is up. Run 'service cassandra start'. Check the status of cassandra using 'nodetool status' command.
+ - Run Artemis message broker in a terminal using executable in /message_broker/bin. Run service activemq start
+ - Run Spring Boot backend by 'gradlew' executable in /rest_api.
  - Open 127.0.0.1 in the web browser where you can configure a user account and create devices and sensors
 
 ## Storing data
