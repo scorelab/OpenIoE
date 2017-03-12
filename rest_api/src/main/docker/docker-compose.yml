@@ -5,7 +5,7 @@ services:
     cassandra:
         image: "spotify/cassandra:latest"
     ioe-app:
-        image: jhip
+        build: .
         external_links:
             - ioe-mysql:mysql
         environment:

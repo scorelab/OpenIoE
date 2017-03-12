@@ -21,7 +21,7 @@ public class IoeConfiguration {
     }
 
     public static class Cassandra {
-        private String cassandraUrl;
+        private String cassandraUrl = "http://cassandra";
         private String cassandraKeyspace = "ioe";
         private String strategy = "SimpleStrategy";
         private String replicationFactor = "1";
