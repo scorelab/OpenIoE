@@ -51,9 +51,9 @@
         </div>
         <div class="form-group">
             <label class="control-label" translate="ioeApp.sensor.storeType" for="field_storeType">Store Type</label>
-            <input type="text" class="form-control" name="storeType" id="field_storeType"
-                    ng-model="vm.sensor.storeType"
-                     />
+            <select class="form-control" name="storeType" id="field_storeType"
+                    ng-model="vm.sensor.storeType" ng-options="storeType as storeType for storeType in vm.storeTypes">
+	    <option value=""></option >
         </div>
         <div class="form-group">
             <label class="control-label" translate="ioeApp.sensor.tableId" for="field_tableId">Table Id</label>
