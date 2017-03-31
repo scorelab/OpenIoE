@@ -16,10 +16,10 @@
             "detail": {
                 "title": "Sensor Data"
             },
-            "sensorId": "Sensor Id",
             "data": "Data",
             "description": "Description",
-            "timestamp": "Timestamp"
+            "timestamp": "Timestamp",
+            "sensor": "Sensor"
         }
     }
 }

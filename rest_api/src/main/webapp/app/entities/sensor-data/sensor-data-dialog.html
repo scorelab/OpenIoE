@@ -14,12 +14,6 @@
                     ng-model="vm.sensorData.id" readonly />
         </div>
         <div class="form-group">
-            <label class="control-label" translate="ioeApp.sensorData.sensorId" for="field_sensorId">Sensor Id</label>
-            <input type="number" class="form-control" name="sensorId" id="field_sensorId"
-                    ng-model="vm.sensorData.sensorId"
-                     />
-        </div>
-        <div class="form-group">
             <label class="control-label" translate="ioeApp.sensorData.data" for="field_data">Data</label>
             <input type="text" class="form-control" name="data" id="field_data"
                     ng-model="vm.sensorData.data"
@@ -42,6 +36,12 @@
                 </div>
         </div>
 
+        <div class="form-group">
+            <label translate="ioeApp.sensorData.sensor" for="field_sensor">Sensor</label>
+            <select class="form-control" id="field_sensor" name="sensor" ng-model="vm.sensorData.sensor" ng-options="sensor as sensor.id for sensor in vm.sensors track by sensor.id">
+                <option value=""></option>
+            </select>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">

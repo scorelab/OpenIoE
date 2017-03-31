@@ -71,7 +71,6 @@
                     resolve: {
                         entity: function () {
                             return {
-                                sensorId: null,
                                 data: null,
                                 description: null,
                                 timestamp: null,

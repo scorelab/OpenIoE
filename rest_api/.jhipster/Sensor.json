@@ -20,6 +20,13 @@
       "otherEntityName": "user",
       "relationshipType": "many-to-one",
       "otherEntityField": "id"
+    },
+    {
+      "relationshipId": 4,
+      "relationshipName": "sensorData",
+      "otherEntityName": "sensorData",
+      "relationshipType": "one-to-many",
+      "otherEntityRelationshipName": "sensor"
     }
   ],
   "fields": [

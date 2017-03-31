@@ -4,10 +4,6 @@
     <hr>
     <jhi-alert-error></jhi-alert-error>
     <dl class="dl-horizontal jh-entity-details">
-        <dt><span translate="ioeApp.sensorData.sensorId">Sensor Id</span></dt>
-        <dd>
-            <span>{{vm.sensorData.sensorId}}</span>
-        </dd>
         <dt><span translate="ioeApp.sensorData.data">Data</span></dt>
         <dd>
             <span>{{vm.sensorData.data}}</span>
@@ -19,6 +15,10 @@
         <dt><span translate="ioeApp.sensorData.timestamp">Timestamp</span></dt>
         <dd>
             <span>{{vm.sensorData.timestamp | date:'medium'}}</span>
+        </dd>
+        <dt><span translate="ioeApp.sensorData.sensor">Sensor</span></dt>
+        <dd>
+            <a ui-sref="sensor-detail({id:vm.sensorData.sensor.id})">{{vm.sensorData.sensor.id}}</a>
         </dd>
     </dl>
 

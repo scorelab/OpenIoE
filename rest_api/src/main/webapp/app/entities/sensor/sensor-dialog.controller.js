@@ -5,9 +5,9 @@
         .module('ioeApp')
         .controller('SensorDialogController', SensorDialogController);
 
-    SensorDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'Sensor', 'Device', 'Subscription', 'User'];
+    SensorDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'Sensor', 'Device', 'Subscription', 'User', 'SensorData'];
 
-    function SensorDialogController ($timeout, $scope, $stateParams, $uibModalInstance, entity, Sensor, Device, Subscription, User) {
+    function SensorDialogController ($timeout, $scope, $stateParams, $uibModalInstance, entity, Sensor, Device, Subscription, User, SensorData) {
         var vm = this;
 
         vm.sensor = entity;
@@ -16,6 +16,7 @@
         vm.devices = Device.query();
         vm.subscriptions = Subscription.query();
         vm.users = User.query();
+        vm.sensordata = SensorData.query();
 
         $timeout(function (){
             angular.element('.form-group:eq(1)>input').focus();
