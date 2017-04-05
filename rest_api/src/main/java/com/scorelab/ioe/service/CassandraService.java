@@ -59,6 +59,7 @@ public class CassandraService implements SensorDataRepositoryService {
                     "event_time timestamp," +
                     "value text," +
                     "description text," +
+                    "topic text," +
                     "PRIMARY KEY (date,event_time)" +
                     ");");
         } else {
@@ -67,13 +68,14 @@ public class CassandraService implements SensorDataRepositoryService {
                     "event_time timestamp," +
                     "value text," +
                     "description text," +
+                    "topic text," +
                     "PRIMARY KEY (event_time)" +
                     ") WITH CLUSTERING ORDER BY (event_time DESC);");
         }
     }
 
     @Override
-    public void insertData(Long sensorId, String data, String description, ZonedDateTime timestamp, StoreTypes storeType, int ttlValue) {
+    public void insertData(Long sensorId, String data, String description, ZonedDateTime timestamp, StoreTypes storeType, String topic, int ttlValue) {
         String tableName = returnSensorTableName(sensorId);
         String date = timestamp.format(DateTimeFormatter.ISO_LOCAL_DATE);
         Date utcTimestamp = Date.from(timestamp.toInstant());
@@ -83,7 +85,8 @@ public class CassandraService implements SensorDataRepositoryService {
                 .value("date", date)
                 .value("event_time", utcTimestamp)
                 .value("value", data)
-                .value("description", description);
+                .value("description", description)
+                .value("topic", topic);
             session.execute(statement);
         } else {
             Statement statement = QueryBuilder.insertInto(ioeConfiguration.getCassandra().getCassandraKeyspace(), tableName)
@@ -91,6 +94,7 @@ public class CassandraService implements SensorDataRepositoryService {
                 .value("event_time", utcTimestamp)
                 .value("value", data)
                 .value("description", description)
+                .value("topic", topic)
                 .using(ttl(ttlValue));
             session.execute(statement);
         }
@@ -123,13 +127,10 @@ public class CassandraService implements SensorDataRepositoryService {
         Statement statement = QueryBuilder
             .select()
             .raw("JSON *")
-            .from(ioeConfiguration.getCassandra().getCassandraKeyspace(), tableName);
-
-        // TODO - Add topic field to sensorData and check
-
+            .from(ioeConfiguration.getCassandra().getCassandraKeyspace(), tableName).allowFiltering()
+            .where(in("topic", topic));
         ResultSet rs = session.execute(statement);
-
-
+        
         for (Row row : rs) {
             results.add(row.getString(0));
         }

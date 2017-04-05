@@ -75,6 +75,7 @@
                                 data: null,
                                 description: null,
                                 timestamp: null,
+                                topic: null,
                                 id: null
                             };
                         }
