@@ -180,6 +180,21 @@ public class SensorResource {
     }
 
     /**
+     * GET /sensors/:id
+     * Return all sensor data
+     *
+     * @param id of the sensor to insert payload
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @RequestMapping(value = "/sensors/{id}/{topic}/data",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public List<String> GetSensorPayloadbyTopic(@PathVariable Long id, @PathVariable String topic){
+        return databaseService.readData(id, topic);
+    }
+
+    /**
      * GET /sensors/:id/data
      * Return all sensor data by given dates
      *

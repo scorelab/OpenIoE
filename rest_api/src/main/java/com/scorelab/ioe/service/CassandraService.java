@@ -116,6 +116,28 @@ public class CassandraService implements SensorDataRepositoryService {
     }
 
     @Override
+    public List<String> readData(Long sensorId, String topic) {
+        String tableName = returnSensorTableName(sensorId);
+        List<String> results = new ArrayList<>();
+
+        Statement statement = QueryBuilder
+            .select()
+            .raw("JSON *")
+            .from(ioeConfiguration.getCassandra().getCassandraKeyspace(), tableName);
+
+        // TODO - Add topic field to sensorData and check
+
+        ResultSet rs = session.execute(statement);
+
+
+        for (Row row : rs) {
+            results.add(row.getString(0));
+        }
+
+        return results;
+    }
+
+    @Override
     public List<String> readData(Long sensorId, List<LocalDate> dates) {
         String tableName = returnSensorTableName(sensorId);
         List<String> results = new ArrayList<>();

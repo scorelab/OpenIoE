@@ -19,5 +19,7 @@ public interface SensorDataRepositoryService {
 
     public List<String> readData(Long sensorId);
 
+    public List<String> readData(Long sensorId, String topic);
+
     public List<String> readData(Long sensorId, List<LocalDate> dates);
 }
