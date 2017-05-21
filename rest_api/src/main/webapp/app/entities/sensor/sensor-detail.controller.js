@@ -5,9 +5,9 @@
         .module('ioeApp')
         .controller('SensorDetailController', SensorDetailController);
 
-    SensorDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'entity', 'Sensor', 'Device', 'Subscription', 'User'];
+    SensorDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'entity', 'Sensor', 'Device', 'Subscription', 'User', 'SensorData'];
 
-    function SensorDetailController($scope, $rootScope, $stateParams, entity, Sensor, Device, Subscription, User) {
+    function SensorDetailController($scope, $rootScope, $stateParams, entity, Sensor, Device, Subscription, User, SensorData) {
         var vm = this;
 
         vm.sensor = entity;

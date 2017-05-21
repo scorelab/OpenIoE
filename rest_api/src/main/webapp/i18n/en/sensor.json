@@ -25,7 +25,8 @@
             "tableId": "Table Id",
             "device": "Device",
             "subscription": "Subscription",
-            "user": "User"
+            "user": "User",
+            "sensorData": "Sensor Data"
         }
     }
 }

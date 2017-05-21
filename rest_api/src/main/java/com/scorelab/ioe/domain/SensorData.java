@@ -19,9 +19,6 @@ public class SensorData implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "sensor_id")
-    private Long sensorId;
-
     @Column(name = "data")
     private String data;
 
@@ -31,20 +28,15 @@ public class SensorData implements Serializable {
     @Column(name = "timestamp")
     private ZonedDateTime timestamp;
 
+    @ManyToOne
+    private Sensor sensor;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getSensorId() {
-        return sensorId;
-    }
-
-    public void setSensorId(Long sensorId) {
-        this.sensorId = sensorId;
     }
 
     public String getData() {
@@ -71,6 +63,14 @@ public class SensorData implements Serializable {
         this.timestamp = timestamp;
     }
 
+    public Sensor getSensor() {
+        return sensor;
+    }
+
+    public void setSensor(Sensor sensor) {
+        this.sensor = sensor;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -95,7 +95,6 @@ public class SensorData implements Serializable {
     public String toString() {
         return "SensorData{" +
             "id=" + id +
-            ", sensorId='" + sensorId + "'" +
             ", data='" + data + "'" +
             ", description='" + description + "'" +
             ", timestamp='" + timestamp + "'" +

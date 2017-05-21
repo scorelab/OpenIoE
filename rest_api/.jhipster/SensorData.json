@@ -1,11 +1,14 @@
 {
-    "relationships": [],
-    "fields": [
+    "relationships": [
         {
-            "fieldName": "sensorId",
-            "fieldType": "Long",
-            "fieldValidateRules": []
-        },
+            "relationshipId": 1,
+            "relationshipName": "sensor",
+            "otherEntityName": "sensor",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
         {
             "fieldName": "data",
             "fieldType": "String",

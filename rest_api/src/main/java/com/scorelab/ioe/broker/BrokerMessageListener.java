@@ -41,9 +41,9 @@ public class BrokerMessageListener implements MessageListener {
             SensorData sensorData = gson.fromJson(textMessage.getText(), SensorData.class);
             ZonedDateTime utcTime = sensorData.getTimestamp().withZoneSameInstant(ZoneOffset.UTC);
 
-            Sensor sensor = sensorRepository.findBySensorId(sensorData.getSensorId());
+            Sensor sensor = sensorRepository.findBySensorId(sensorData.getSensor().getId());
             // TODO - Read TTL value
-            databaseService.insertData(sensorData.getSensorId(), sensorData.getData(), sensorData.getDescription(), utcTime, StoreTypes.valueOf(sensor.getStoreType()), 0);
+            databaseService.insertData(sensorData.getSensor().getId(), sensorData.getData(), sensorData.getDescription(), utcTime, StoreTypes.valueOf(sensor.getStoreType()), 0);
 
             System.out.println("Received message: " + textMessage.getText());
         } catch (JMSException e) {

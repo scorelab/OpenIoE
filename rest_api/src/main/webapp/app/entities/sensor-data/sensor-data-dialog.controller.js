@@ -5,9 +5,9 @@
         .module('ioeApp')
         .controller('SensorDataDialogController', SensorDataDialogController);
 
-    SensorDataDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'SensorData'];
+    SensorDataDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'SensorData', 'Sensor'];
 
-    function SensorDataDialogController ($timeout, $scope, $stateParams, $uibModalInstance, entity, SensorData) {
+    function SensorDataDialogController ($timeout, $scope, $stateParams, $uibModalInstance, entity, SensorData, Sensor) {
         var vm = this;
 
         vm.sensorData = entity;
@@ -15,6 +15,7 @@
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
         vm.save = save;
+        vm.sensors = Sensor.query();
 
         $timeout(function (){
             angular.element('.form-group:eq(1)>input').focus();

@@ -54,6 +54,10 @@ public class Sensor implements Serializable {
     @ManyToOne
     private User user;
 
+    @OneToMany(mappedBy = "sensor")
+    @JsonIgnore
+    private Set<SensorData> sensorData = new HashSet<>();
+
     public Long getId() {
         return id;
     }
@@ -140,6 +144,14 @@ public class Sensor implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Set<SensorData> getSensorData() {
+        return sensorData;
+    }
+
+    public void setSensorData(Set<SensorData> sensorData) {
+        this.sensorData = sensorData;
     }
 
     @Override
