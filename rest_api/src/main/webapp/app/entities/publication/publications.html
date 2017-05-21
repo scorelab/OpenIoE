@@ -1,0 +1,68 @@
+<div>
+    <h2 translate="ioeApp.publication.home.title">Publications</h2>
+    <jhi-alert></jhi-alert>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-4 no-padding-left">
+                <button class="btn btn-primary" ui-sref="publication.new" >
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span  translate="ioeApp.publication.home.createLabel">
+                        Create new Publication
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+                <tr>
+                    <th><span translate="global.field.id">ID</span></th>
+                    <th><span translate="ioeApp.publication.publicationId">Publication Id</span></th>
+                    <th><span translate="ioeApp.publication.device">Device</span></th>
+                    <th><span translate="ioeApp.publication.sensor">Sensor</span></th>
+                    <th><span translate="ioeApp.publication.user">User</span></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="publication in vm.publications track by publication.id">
+                    <td><a ui-sref="publication-detail({id:publication.id})">{{publication.id}}</a></td>
+                    <td>{{publication.publicationId}}</td>
+                    <td>
+                        <a ui-sref="device-detail({id:publication.device.id})">{{publication.device.id}}</a>
+                    </td>
+                    <td>
+                        <a ui-sref="sensor-detail({id:publication.sensor.id})">{{publication.sensor.id}}</a>
+                    </td>
+                    <td>
+                        {{publication.user.id}}
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <button type="submit"
+                                    ui-sref="publication-detail({id:publication.id})"
+                                    class="btn btn-info btn-sm">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                                <span class="hidden-xs hidden-sm" translate="entity.action.view"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="publication.edit({id:publication.id})"
+                                    class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="hidden-xs hidden-sm" translate="entity.action.edit"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="publication.delete({id:publication.id})"
+                                    class="btn btn-danger btn-sm">
+                                <span class="glyphicon glyphicon-remove-circle"></span>
+                                <span class="hidden-xs hidden-sm" translate="entity.action.delete"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

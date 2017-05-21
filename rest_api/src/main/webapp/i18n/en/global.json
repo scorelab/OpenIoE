@@ -11,6 +11,7 @@
                 "sensor": "Sensor",
                 "subscription": "Subscription",
                 "sensorData": "Sensor Data",
+                "publication": "Publication",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
