@@ -31,6 +31,9 @@ public class SensorData implements Serializable {
     @Column(name = "timestamp")
     private ZonedDateTime timestamp;
 
+    @Column(name = "topic")
+    private String topic;
+
     public Long getId() {
         return id;
     }
@@ -71,6 +74,14 @@ public class SensorData implements Serializable {
         this.timestamp = timestamp;
     }
 
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -99,6 +110,7 @@ public class SensorData implements Serializable {
             ", data='" + data + "'" +
             ", description='" + description + "'" +
             ", timestamp='" + timestamp + "'" +
+            ", topic='" + topic + "'" +
             '}';
     }
 }

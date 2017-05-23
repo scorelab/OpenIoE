@@ -161,7 +161,7 @@ public class SensorResource {
 
         Sensor sensor = sensorRepository.findBySensorId(sensorData.getSensorId());
         // TODO - Read TTL value
-        databaseService.insertData(sensorData.getSensorId(), sensorData.getData(), sensorData.getDescription(), utcTime, StoreTypes.valueOf(sensor.getStoreType()), 0);
+        databaseService.insertData(sensorData.getSensorId(), sensorData.getData(), sensorData.getDescription(), utcTime, StoreTypes.valueOf(sensor.getStoreType()), sensorData.getTopic(), 0);
     }
 
     /**
@@ -177,6 +177,21 @@ public class SensorResource {
     @Timed
     public List<String> GetSensorPayload(@PathVariable Long id) {
         return databaseService.readData(id);
+    }
+
+    /**
+     * GET /sensors/:id
+     * Return all sensor data by topic
+     *
+     * @param id of the sensor to insert payload
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @RequestMapping(value = "/sensors/{id}/{topic}/data",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public List<String> GetSensorPayloadbyTopic(@PathVariable Long id, @PathVariable String topic){
+        return databaseService.readData(id, topic);
     }
 
     /**

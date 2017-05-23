@@ -15,9 +15,11 @@ public interface SensorDataRepositoryService {
 
     public void createSensorTable(Long sensorId, StoreTypes storeType);
 
-    public void insertData(Long sensorId, String data, String description, ZonedDateTime timestamp, StoreTypes storeType, int ttlValue);
+    public void insertData(Long sensorId, String data, String description, ZonedDateTime timestamp, StoreTypes storeType, String topic, int ttlValue);
 
     public List<String> readData(Long sensorId);
+
+    public List<String> readData(Long sensorId, String topic);
 
     public List<String> readData(Long sensorId, List<LocalDate> dates);
 }

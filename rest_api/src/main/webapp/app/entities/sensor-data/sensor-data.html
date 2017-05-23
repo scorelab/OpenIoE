@@ -23,6 +23,7 @@
                     <th><span translate="ioeApp.sensorData.data">Data</span></th>
                     <th><span translate="ioeApp.sensorData.description">Description</span></th>
                     <th><span translate="ioeApp.sensorData.timestamp">Timestamp</span></th>
+                    <th><span translate="ioeApp.sensorData.topic">Topic</span></th>
                     <th></th>
                 </tr>
             </thead>
@@ -33,6 +34,7 @@
                     <td>{{sensorData.data}}</td>
                     <td>{{sensorData.description}}</td>
                     <td>{{sensorData.timestamp | date:'medium'}}</td>
+                    <td>{{sensorData.topic}}</td>
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">
                             <button type="submit"

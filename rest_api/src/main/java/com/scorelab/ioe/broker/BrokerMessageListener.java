@@ -43,7 +43,7 @@ public class BrokerMessageListener implements MessageListener {
 
             Sensor sensor = sensorRepository.findBySensorId(sensorData.getSensorId());
             // TODO - Read TTL value
-            databaseService.insertData(sensorData.getSensorId(), sensorData.getData(), sensorData.getDescription(), utcTime, StoreTypes.valueOf(sensor.getStoreType()), 0);
+            databaseService.insertData(sensorData.getSensorId(), sensorData.getData(), sensorData.getDescription(), utcTime, StoreTypes.valueOf(sensor.getStoreType()), sensorData.getTopic(), 0);
 
             System.out.println("Received message: " + textMessage.getText());
         } catch (JMSException e) {

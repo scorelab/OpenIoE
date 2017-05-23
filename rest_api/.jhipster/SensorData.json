@@ -19,6 +19,10 @@
             "fieldName": "timestamp",
             "fieldType": "ZonedDateTime",
             "fieldValidateRules": []
+        },
+        {
+            "fieldName": "topic",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20160628155140",
