@@ -17,6 +17,7 @@
                 "title": "Subscription"
             },
             "subscriptionId": "Subscription Id",
+            "topics": "Topics",
             "device": "Device",
             "sensor": "Sensor",
             "user": "User"
