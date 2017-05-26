@@ -2,10 +2,16 @@ package com.scorelab.ioe.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.scorelab.ioe.domain.Publication;
+import com.scorelab.ioe.domain.Sensor;
+import com.scorelab.ioe.domain.SensorData;
+import com.scorelab.ioe.nosql.StoreTypes;
 import com.scorelab.ioe.repository.PublicationRepository;
+import com.scorelab.ioe.repository.SensorRepository;
+import com.scorelab.ioe.service.SensorDataRepositoryService;
 import com.scorelab.ioe.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,8 +19,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,10 +35,17 @@ import java.util.Optional;
 public class PublicationResource {
 
     private final Logger log = LoggerFactory.getLogger(PublicationResource.class);
-        
+
     @Inject
     private PublicationRepository publicationRepository;
-    
+
+   @Inject
+    private SensorRepository sensorRepository;
+
+    @Autowired
+    private SensorDataRepositoryService databaseService;
+
+
     /**
      * POST  /publications : Create a new publication.
      *
@@ -88,7 +104,30 @@ public class PublicationResource {
     public List<Publication> getAllPublications() {
         log.debug("REST request to get all Publications");
         List<Publication> publications = publicationRepository.findAll();
+
         return publications;
+    }
+
+    /**
+     * POST /sensors/:id
+     * Insert sensor data to Cassandra storage
+     *
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+  //  List<Publication> publications = publicationRepository.findAll();
+
+        @RequestMapping(value = "/publish/{sensorId}",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+
+        @Timed
+
+        public void publishData (@Valid @RequestBody SensorData sensorData){
+        ZonedDateTime utcTime = sensorData.getTimestamp().withZoneSameInstant(ZoneOffset.UTC);
+
+        Sensor sensor = sensorRepository.findBySensorId(sensorData.getSensorId());
+        // TODO - Read TTL value
+        databaseService.insertData(sensorData.getSensorId(), sensorData.getData(), sensorData.getDescription(), utcTime, StoreTypes.valueOf(sensor.getStoreType()), sensorData.getTopic(), 0);
     }
 
     /**
