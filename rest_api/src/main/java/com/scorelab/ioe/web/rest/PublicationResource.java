@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
+import javax.validation.constraints.Null;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.ZoneOffset;
@@ -109,25 +110,27 @@ public class PublicationResource {
     }
 
     /**
-     * POST /sensors/:id
+     * POST /publish/:sensorid
      * Insert sensor data to Cassandra storage
      *
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-  //  List<Publication> publications = publicationRepository.findAll();
 
-        @RequestMapping(value = "/publish/{sensorId}",
-            method = RequestMethod.POST,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/publish/{sensorid}",
+    	method = RequestMethod.POST,
+        produces = MediaType.APPLICATION_JSON_VALUE)
 
-        @Timed
-
-        public void publishData (@Valid @RequestBody SensorData sensorData){
-        ZonedDateTime utcTime = sensorData.getTimestamp().withZoneSameInstant(ZoneOffset.UTC);
-
-        Sensor sensor = sensorRepository.findBySensorId(sensorData.getSensorId());
-        // TODO - Read TTL value
-        databaseService.insertData(sensorData.getSensorId(), sensorData.getData(), sensorData.getDescription(), utcTime, StoreTypes.valueOf(sensor.getStoreType()), sensorData.getTopic(), 0);
+    @Timed
+    public void publishData (@Valid @RequestBody SensorData sensorData){
+        List<Publication> publications = publicationRepository.findAll();
+        for(Publication p:publications) {
+            if(p.getSensor().getSensorId()==sensorData.getSensorId()){
+                ZonedDateTime utcTime = sensorData.getTimestamp().withZoneSameInstant(ZoneOffset.UTC);
+                Sensor sensor = sensorRepository.findBySensorId(sensorData.getSensorId());
+                // TODO - Read TTL value
+                databaseService.insertData(sensorData.getSensorId(), sensorData.getData(), sensorData.getDescription(), utcTime, StoreTypes.valueOf(sensor.getStoreType()), sensorData.getTopic(), 0);
+            }
+        }
     }
 
     /**
