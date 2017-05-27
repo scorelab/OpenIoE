@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
-import javax.validation.constraints.Null;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.ZoneOffset;
@@ -128,7 +127,6 @@ public class PublicationResource {
             Sensor sensor = sensorRepository.findBySensorId(sensorData.getSensorId());
             // TODO - Read TTL value
             databaseService.insertData(sensorData.getSensorId(), sensorData.getData(), sensorData.getDescription(), utcTime, StoreTypes.valueOf(sensor.getStoreType()), sensorData.getTopic(), 0);
-
         }
     }
 

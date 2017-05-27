@@ -2,7 +2,6 @@ package com.scorelab.ioe.repository;
 
 import com.scorelab.ioe.domain.Publication;
 
-import com.scorelab.ioe.domain.Sensor;
 import org.springframework.data.jpa.repository.*;
 
 import java.util.List;
