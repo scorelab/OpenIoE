@@ -72,7 +72,7 @@
                         entity: function () {
                             return {
                                 subscriptionId: null,
-                                topics: null,
+                                topicFilter: null,
                                 id: null
                             };
                         }

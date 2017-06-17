@@ -30,7 +30,7 @@
     },
     {
       "fieldId": 2,
-      "fieldName": "topics",
+      "fieldName": "topicFilter",
       "fieldType": "String"
     }
   ],
