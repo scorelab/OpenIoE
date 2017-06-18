@@ -21,6 +21,9 @@ public class Subscription implements Serializable {
     @Column(name = "subscription_id")
     private Long subscriptionId;
 
+    @Column(name = "topic_filter")
+    private String topicFilter;
+
     @ManyToOne
     private Device device;
 
@@ -44,6 +47,14 @@ public class Subscription implements Serializable {
 
     public void setSubscriptionId(Long subscriptionId) {
         this.subscriptionId = subscriptionId;
+    }
+
+    public String getTopicFilter() {
+        return topicFilter;
+    }
+
+    public void setTopicFilter(String topicFilter) {
+        this.topicFilter = topicFilter;
     }
 
     public Device getDevice() {
@@ -95,6 +106,7 @@ public class Subscription implements Serializable {
         return "Subscription{" +
             "id=" + id +
             ", subscriptionId='" + subscriptionId + "'" +
+            ", topicFilter='" + topicFilter + "'" +
             '}';
     }
 }

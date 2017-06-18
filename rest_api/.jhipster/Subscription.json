@@ -27,6 +27,11 @@
       "fieldId": 1,
       "fieldName": "subscriptionId",
       "fieldType": "Long"
+    },
+    {
+      "fieldId": 2,
+      "fieldName": "topicFilter",
+      "fieldType": "String"
     }
   ],
   "changelogDate": "20160605135943",
