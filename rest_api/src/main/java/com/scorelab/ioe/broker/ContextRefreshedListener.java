@@ -3,6 +3,7 @@ package com.scorelab.ioe.broker;
 import com.scorelab.ioe.config.IoeConfiguration;
 import com.scorelab.ioe.repository.SensorRepository;
 import com.scorelab.ioe.service.SensorDataRepositoryService;
+import com.scorelab.ioe.repository.SubscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationListener;
@@ -30,8 +31,11 @@ public class ContextRefreshedListener implements ApplicationListener<ContextRefr
     @Autowired
     private SensorDataRepositoryService databaseService;
 
+    @Autowired
+    private SubscriptionRepository subscriptionRepository;
+
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        taskExecutor.execute(new BrokerConsumerThread(sensorRepository, databaseService, ioeConfiguration));
+        taskExecutor.execute(new BrokerConsumerThread(sensorRepository, databaseService, ioeConfiguration, subscriptionRepository));
     }
 }

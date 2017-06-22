@@ -18,7 +18,7 @@ public class MqttConsumerThread {
 
     public void StartBrokerConsumer() throws Exception {
         MQTT mqtt = new MQTT();
-        mqtt.setHost(ioeConfiguration.getQueue().getMqttUrl());
+        mqtt.setHost(ioeConfiguration.getTopic().getMqttUrl());
         BlockingConnection connection = mqtt.blockingConnection();
         connection.connect();
 

@@ -5,9 +5,13 @@ import javax.jms.*;
 import com.scorelab.ioe.config.IoeConfiguration;
 import com.scorelab.ioe.repository.SensorRepository;
 import com.scorelab.ioe.service.SensorDataRepositoryService;
+import com.scorelab.ioe.repository.SubscriptionRepository;
+import com.scorelab.ioe.domain.Subscription;
 import org.apache.activemq.artemis.api.jms.ActiveMQJMSClient;
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 
+import java.util.List;
+import javax.validation.Valid;
 /**
  * Created by tharidu on 8/1/16.
  */
@@ -30,11 +34,13 @@ public class BrokerConsumerThread implements Runnable {
     private SensorRepository sensorRepository;
     private SensorDataRepositoryService databaseService;
     private IoeConfiguration ioeConfiguration;
+    private SubscriptionRepository subscriptionRepository;
 
-    public BrokerConsumerThread(SensorRepository sensorRepository, SensorDataRepositoryService databaseService, IoeConfiguration ioeConfiguration) {
+    public BrokerConsumerThread(SensorRepository sensorRepository, SensorDataRepositoryService databaseService, IoeConfiguration ioeConfiguration, SubscriptionRepository subscriptionRepository) {
         this.sensorRepository = sensorRepository;
         this.databaseService = databaseService;
         this.ioeConfiguration = ioeConfiguration;
+        this.subscriptionRepository = subscriptionRepository;
     }
 
     public void StartBrokerConsumer() throws JMSException {
@@ -43,15 +49,17 @@ public class BrokerConsumerThread implements Runnable {
 
         Connection connection = null;
         try {
-            Queue queue = ActiveMQJMSClient.createQueue(ioeConfiguration.getQueue().getQueueName());
-            ConnectionFactory cf = new ActiveMQConnectionFactory(ioeConfiguration.getQueue().getQueueUrl());
-            connection = cf.createConnection(ioeConfiguration.getQueue().getUsername(), ioeConfiguration.getQueue().getPassword());
+            ConnectionFactory cf = new ActiveMQConnectionFactory(ioeConfiguration.getTopic().getTopicUrl());
+            connection = cf.createConnection(ioeConfiguration.getTopic().getUsername(), ioeConfiguration.getTopic().getPassword());
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            MessageConsumer messageConsumer = session.createConsumer(queue);
-            messageConsumer.setMessageListener(new BrokerMessageListener(sensorRepository, databaseService));
 
+            List<Subscription> subscriptions = subscriptionRepository.findAll();
+            for(Subscription s:subscriptions) {
+                Topic topic = ActiveMQJMSClient.createTopic(s.getTopicFilter());
+                MessageConsumer messageConsumer = session.createConsumer(topic);
+                messageConsumer.setMessageListener(new BrokerMessageListener(sensorRepository, databaseService));
+            }
             connection.start();
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -60,10 +68,10 @@ public class BrokerConsumerThread implements Runnable {
     @Override
     public void run() {
         try {
-            StartBrokerConsumer();
-            while (true) {
-                Thread.sleep(1000);
-            }
+                StartBrokerConsumer();
+                while (true) {
+                    Thread.sleep(1000);
+                }
         } catch (JMSException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -72,6 +80,7 @@ public class BrokerConsumerThread implements Runnable {
     }
 
     public void start() {
+
         if (t == null) {
             t = new Thread(this);
             t.start();

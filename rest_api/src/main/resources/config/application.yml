@@ -84,9 +84,9 @@ ioe:
         cassandraKeyspace: ioe
         strategy: SimpleStrategy
         replicationFactor: 1
-    queue:
-        queueName: ioeQueue
-        queueUrl: tcp://broker:61616
-        mqttUrl: tcp://broker:61616
+    topic:
+        topicName: ioe
+        topicUrl: tcp://localhost:61616
+        mqttUrl: tcp://localhost:61616
         username: artemis
         password: simetraehcapa
