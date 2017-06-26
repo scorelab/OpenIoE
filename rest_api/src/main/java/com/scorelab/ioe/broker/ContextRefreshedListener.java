@@ -36,6 +36,6 @@ public class ContextRefreshedListener implements ApplicationListener<ContextRefr
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        taskExecutor.execute(new BrokerConsumerThread(sensorRepository, databaseService, ioeConfiguration, subscriptionRepository));
+        taskExecutor.execute(new MqttConsumerThread(sensorRepository, databaseService, ioeConfiguration, subscriptionRepository));
     }
 }
