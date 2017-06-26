@@ -10,14 +10,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class IoeConfiguration {
 
     private final Cassandra cassandra = new Cassandra();
-    private final Queue queue = new Queue();
+    private final Topic topic = new Topic();
 
     public Cassandra getCassandra() {
         return cassandra;
     }
 
-    public Queue getQueue() {
-        return queue;
+    public Topic getTopic() {
+        return topic;
     }
 
     public static class Cassandra {
@@ -51,27 +51,27 @@ public class IoeConfiguration {
         }
     }
 
-    public static class Queue {
-        private String queueName = "ioeQueue";
-        private String queueUrl = "tcp://localhost:61616";
+    public static class Topic {
+        private String topicName = "ioe";
+        private String topicUrl = "tcp://localhost:61616";
         private String mqttUrl = "tcp://localhost:61616";
         private String username;
         private String password;
 
-        public String getQueueName() {
-            return queueName;
+        public String getTopicName() {
+            return topicName;
         }
 
-        public void setQueueName(String queueName) {
-            this.queueName = queueName;
+        public void setTopicName(String topicName) {
+            this.topicName = topicName;
         }
 
-        public String getQueueUrl() {
-            return queueUrl;
+        public String getTopicUrl() {
+            return topicUrl;
         }
 
-        public void setQueueUrl(String queueUrl) {
-            this.queueUrl = queueUrl;
+        public void setTopicUrl(String topicUrl) {
+            this.topicUrl = topicUrl;
         }
 
         public String getMqttUrl() {
