@@ -44,6 +44,8 @@ public class PublicationResourceIntTest {
 
     private static final Long DEFAULT_PUBLICATION_ID = 1L;
     private static final Long UPDATED_PUBLICATION_ID = 2L;
+    private static final String DEFAULT_TOPIC_FILTER = "AAAAA";
+    private static final String UPDATED_TOPIC_FILTER = "BBBBB";
 
     @Inject
     private PublicationRepository publicationRepository;
@@ -72,6 +74,7 @@ public class PublicationResourceIntTest {
     public void initTest() {
         publication = new Publication();
         publication.setPublicationId(DEFAULT_PUBLICATION_ID);
+        publication.setTopicFilter(DEFAULT_TOPIC_FILTER);
     }
 
     @Test
@@ -91,6 +94,7 @@ public class PublicationResourceIntTest {
         assertThat(publications).hasSize(databaseSizeBeforeCreate + 1);
         Publication testPublication = publications.get(publications.size() - 1);
         assertThat(testPublication.getPublicationId()).isEqualTo(DEFAULT_PUBLICATION_ID);
+        assertThat(testPublication.getTopicFilter()).isEqualTo(DEFAULT_TOPIC_FILTER);
     }
 
     @Test
@@ -104,7 +108,8 @@ public class PublicationResourceIntTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(publication.getId().intValue())))
-                .andExpect(jsonPath("$.[*].publicationId").value(hasItem(DEFAULT_PUBLICATION_ID.intValue())));
+                .andExpect(jsonPath("$.[*].publicationId").value(hasItem(DEFAULT_PUBLICATION_ID.intValue())))
+                .andExpect(jsonPath("$.[*].topicFilter").value(hasItem(DEFAULT_TOPIC_FILTER.toString())));
     }
 
     @Test
@@ -118,7 +123,8 @@ public class PublicationResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(publication.getId().intValue()))
-            .andExpect(jsonPath("$.publicationId").value(DEFAULT_PUBLICATION_ID.intValue()));
+            .andExpect(jsonPath("$.publicationId").value(DEFAULT_PUBLICATION_ID.intValue()))
+            .andExpect(jsonPath("$.topicFilter").value(DEFAULT_TOPIC_FILTER.toString()));
     }
 
     @Test
@@ -140,6 +146,7 @@ public class PublicationResourceIntTest {
         Publication updatedPublication = new Publication();
         updatedPublication.setId(publication.getId());
         updatedPublication.setPublicationId(UPDATED_PUBLICATION_ID);
+        updatedPublication.setTopicFilter(UPDATED_TOPIC_FILTER);
 
         restPublicationMockMvc.perform(put("/api/publications")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -151,6 +158,7 @@ public class PublicationResourceIntTest {
         assertThat(publications).hasSize(databaseSizeBeforeUpdate);
         Publication testPublication = publications.get(publications.size() - 1);
         assertThat(testPublication.getPublicationId()).isEqualTo(UPDATED_PUBLICATION_ID);
+        assertThat(testPublication.getTopicFilter()).isEqualTo(UPDATED_TOPIC_FILTER);
     }
 
     @Test
