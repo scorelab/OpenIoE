@@ -7,6 +7,8 @@ import com.scorelab.ioe.domain.SensorData;
 import com.scorelab.ioe.nosql.StoreTypes;
 import com.scorelab.ioe.repository.SensorRepository;
 import com.scorelab.ioe.service.SensorDataRepositoryService;
+import com.scorelab.ioe.config.IoeConfiguration;
+
 import com.scorelab.ioe.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +30,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.fusesource.mqtt.client.BlockingConnection;
+import org.fusesource.mqtt.client.MQTT;
+import org.fusesource.mqtt.client.QoS;
+import org.fusesource.mqtt.client.Topic;
+import org.fusesource.mqtt.client.Message;
+
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+
 /**
  * REST controller for managing Sensor.
  */
@@ -42,6 +55,11 @@ public class SensorResource {
 
     @Autowired
     private SensorDataRepositoryService databaseService;
+
+    @Autowired
+    private IoeConfiguration ioeConfiguration;
+
+    private Gson gson;
 
     /**
      * POST  /sensors : Create a new sensor.
@@ -156,12 +174,25 @@ public class SensorResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public void insertSensorPayload(@Valid @RequestBody SensorData sensorData) {
+    public void insertSensorPayload(@Valid @RequestBody SensorData sensorData) throws Exception{
         ZonedDateTime utcTime = sensorData.getTimestamp().withZoneSameInstant(ZoneOffset.UTC);
 
         Sensor sensor = sensorRepository.findBySensorId(sensorData.getSensorId());
         // TODO - Read TTL value
         databaseService.insertData(sensorData.getSensorId(), sensorData.getData(), sensorData.getDescription(), utcTime, StoreTypes.valueOf(sensor.getStoreType()), sensorData.getTopic(), 0);
+   //new
+        String topic = sensorData.getTopic();
+        MQTT mqtt = new MQTT();
+        mqtt.setHost(ioeConfiguration.getTopic().getMqttUrl());
+        BlockingConnection connection = mqtt.blockingConnection();
+        connection.connect();
+
+        //TODO use gson.toJson(sensordata)
+
+      //  String jsonInString = gson.toJson(sensordata);
+        String payload = "{\"data\": \""+sensorData.getData()+"\",\"description\": \""+sensorData.getDescription()+"\",\"sensorId\": "+sensorData.getSensorId()+", \"timestamp\": \""+utcTime+"\", \"topic\": \""+sensorData.getTopic()+"\"}";
+        connection.publish(topic, payload.getBytes(), QoS.AT_LEAST_ONCE, false);
+
     }
 
     /**
