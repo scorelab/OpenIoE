@@ -6,6 +6,8 @@ import com.scorelab.ioe.domain.Sensor;
 import com.scorelab.ioe.domain.SensorData;
 import com.scorelab.ioe.nosql.StoreTypes;
 import com.scorelab.ioe.repository.SensorRepository;
+import com.scorelab.ioe.domain.Publication;
+import com.scorelab.ioe.repository.PublicationRepository;
 import com.scorelab.ioe.service.SensorDataRepositoryService;
 import com.scorelab.ioe.config.IoeConfiguration;
 
@@ -59,6 +61,9 @@ public class SensorResource {
     @Autowired
     private IoeConfiguration ioeConfiguration;
 
+    @Inject
+    private PublicationRepository publicationRepository;
+
     private Gson gson;
 
     /**
@@ -78,9 +83,7 @@ public class SensorResource {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("sensor", "idexists", "A new sensor cannot already have an ID")).body(null);
         }
         Sensor result = sensorRepository.save(sensor);
-
         databaseService.createSensorTable(result.getSensorId(), StoreTypes.valueOf(result.getStoreType()));
-
         return ResponseEntity.created(new URI("/api/sensors/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("sensor", result.getId().toString()))
             .body(result);
@@ -178,21 +181,23 @@ public class SensorResource {
         ZonedDateTime utcTime = sensorData.getTimestamp().withZoneSameInstant(ZoneOffset.UTC);
 
         Sensor sensor = sensorRepository.findBySensorId(sensorData.getSensorId());
-        // TODO - Read TTL value
-        databaseService.insertData(sensorData.getSensorId(), sensorData.getData(), sensorData.getDescription(), utcTime, StoreTypes.valueOf(sensor.getStoreType()), sensorData.getTopic(), 0);
-   //new
-        String topic = sensorData.getTopic();
-        MQTT mqtt = new MQTT();
-        mqtt.setHost(ioeConfiguration.getTopic().getMqttUrl());
-        BlockingConnection connection = mqtt.blockingConnection();
-        connection.connect();
 
-        //TODO use gson.toJson(sensordata)
+        Publication publication = publicationRepository.findByTopic(sensorData.getSensorId(),sensorData.getTopic());
+            if(publication != null){
+                // TODO - Read TTL value
+                databaseService.insertData(sensorData.getSensorId(), sensorData.getData(), sensorData.getDescription(), utcTime, StoreTypes.valueOf(sensor.getStoreType()), sensorData.getTopic(), 0);
+                String topic = sensorData.getTopic();
+                MQTT mqtt = new MQTT();
+                mqtt.setHost(ioeConfiguration.getTopic().getMqttUrl());
+                BlockingConnection connection = mqtt.blockingConnection();
+                connection.connect();
 
-      //  String jsonInString = gson.toJson(sensordata);
-        String payload = "{\"data\": \""+sensorData.getData()+"\",\"description\": \""+sensorData.getDescription()+"\",\"sensorId\": "+sensorData.getSensorId()+", \"timestamp\": \""+utcTime+"\", \"topic\": \""+sensorData.getTopic()+"\"}";
-        connection.publish(topic, payload.getBytes(), QoS.AT_LEAST_ONCE, false);
+                // TODO - use gson.toJson(sensordata)
+                // String jsonInString = gson.toJson(sensordata);
 
+                String payload = "{\"data\": \""+sensorData.getData()+"\",\"description\": \""+sensorData.getDescription()+"\",\"sensorId\": "+sensorData.getSensorId()+", \"timestamp\": \""+utcTime+"\", \"topic\": \""+sensorData.getTopic()+"\"}";
+                connection.publish(topic, payload.getBytes(), QoS.AT_LEAST_ONCE, false);
+            }
     }
 
     /**

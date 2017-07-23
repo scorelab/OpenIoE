@@ -15,4 +15,7 @@ public interface PublicationRepository extends JpaRepository<Publication,Long> {
     @Query("select publication from Publication publication where publication.user.login = ?#{principal.username}")
     List<Publication> findByUserIsCurrentUser();
 
+    @Query("select publication from Publication publication where publication.sensor.sensorId = ?1 and publication.topicFilter = ?2")
+    Publication findByTopic(Long sensorId, String topicFilter);
+
 }
