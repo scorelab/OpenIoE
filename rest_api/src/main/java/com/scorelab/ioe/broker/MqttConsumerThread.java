@@ -55,6 +55,8 @@ public class MqttConsumerThread implements Runnable{
     public void StartBrokerConsumer() throws Exception {
         MQTT mqtt = new MQTT();
         mqtt.setHost(ioeConfiguration.getTopic().getMqttUrl());
+        mqtt.setUserName(ioeConfiguration.getTopic().getUsername());
+        mqtt.setPassword(ioeConfiguration.getTopic().getPassword());
         BlockingConnection connection = mqtt.blockingConnection();
         connection.connect();
         List<Topic> topic_list = new ArrayList<>();

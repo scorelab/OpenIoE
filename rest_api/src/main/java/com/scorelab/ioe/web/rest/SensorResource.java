@@ -179,25 +179,26 @@ public class SensorResource {
     @Timed
     public void insertSensorPayload(@Valid @RequestBody SensorData sensorData) throws Exception{
         ZonedDateTime utcTime = sensorData.getTimestamp().withZoneSameInstant(ZoneOffset.UTC);
-
         Sensor sensor = sensorRepository.findBySensorId(sensorData.getSensorId());
 
         Publication publication = publicationRepository.findByTopic(sensorData.getSensorId(),sensorData.getTopic());
-            if(publication != null){
-                // TODO - Read TTL value
-                databaseService.insertData(sensorData.getSensorId(), sensorData.getData(), sensorData.getDescription(), utcTime, StoreTypes.valueOf(sensor.getStoreType()), sensorData.getTopic(), 0);
-                String topic = sensorData.getTopic();
-                MQTT mqtt = new MQTT();
-                mqtt.setHost(ioeConfiguration.getTopic().getMqttUrl());
-                BlockingConnection connection = mqtt.blockingConnection();
-                connection.connect();
+        if(publication != null){
+            // TODO - Read TTL value
+            // databaseService.insertData(sensorData.getSensorId(), sensorData.getData(), sensorData.getDescription(), utcTime, StoreTypes.valueOf(sensor.getStoreType()), sensorData.getTopic(), 0);
+            String topic = sensorData.getTopic();
+            MQTT mqtt = new MQTT();
+            mqtt.setHost(ioeConfiguration.getTopic().getMqttUrl());
+            mqtt.setUserName(ioeConfiguration.getTopic().getUsername());
+            mqtt.setPassword(ioeConfiguration.getTopic().getPassword());
+            BlockingConnection connection = mqtt.blockingConnection();
+            connection.connect();
 
-                // TODO - use gson.toJson(sensordata)
-                // String jsonInString = gson.toJson(sensordata);
+            // TODO - use gson.toJson(sensordata)
+            // String jsonInString = gson.toJson(sensordata);
 
-                String payload = "{\"data\": \""+sensorData.getData()+"\",\"description\": \""+sensorData.getDescription()+"\",\"sensorId\": "+sensorData.getSensorId()+", \"timestamp\": \""+utcTime+"\", \"topic\": \""+sensorData.getTopic()+"\"}";
-                connection.publish(topic, payload.getBytes(), QoS.AT_LEAST_ONCE, false);
-            }
+            String payload = "{\"data\": \""+sensorData.getData()+"\",\"description\": \""+sensorData.getDescription()+"\",\"sensorId\": "+sensorData.getSensorId()+", \"timestamp\": \""+utcTime+"\", \"topic\": \""+sensorData.getTopic()+"\"}";
+            connection.publish(topic, payload.getBytes(), QoS.AT_LEAST_ONCE, false);
+        }
     }
 
     /**
