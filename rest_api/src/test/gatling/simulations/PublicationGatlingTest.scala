@@ -68,7 +68,7 @@ class PublicationGatlingTest extends Simulation {
             .exec(http("Create new publication")
             .post("/api/publications")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null, "publicationId":null}""")).asJSON
+            .body(StringBody("""{"id":null, "publicationId":null, "topicFilter":"SAMPLE_TEXT"}""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_publication_url"))).exitHereIfFailed
             .pause(10)

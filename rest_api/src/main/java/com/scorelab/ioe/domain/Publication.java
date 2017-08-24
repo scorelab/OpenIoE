@@ -21,6 +21,9 @@ public class Publication implements Serializable {
     @Column(name = "publication_id")
     private Long publicationId;
 
+    @Column(name = "topic_filter")
+    private String topicFilter;
+
     @ManyToOne
     private Device device;
 
@@ -44,6 +47,14 @@ public class Publication implements Serializable {
 
     public void setPublicationId(Long publicationId) {
         this.publicationId = publicationId;
+    }
+
+    public String getTopicFilter() {
+        return topicFilter;
+    }
+
+    public void setTopicFilter(String topicFilter) {
+        this.topicFilter = topicFilter;
     }
 
     public Device getDevice() {
@@ -95,6 +106,7 @@ public class Publication implements Serializable {
         return "Publication{" +
             "id=" + id +
             ", publicationId='" + publicationId + "'" +
+            ", topicFilter='" + topicFilter + "'" +
             '}';
     }
 }

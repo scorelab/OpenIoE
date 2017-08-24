@@ -17,6 +17,7 @@
                 "title": "Publication"
             },
             "publicationId": "Publication Id",
+            "topicFilter": "Topic Filter",
             "device": "Device",
             "sensor": "Sensor",
             "user": "User"

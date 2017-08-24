@@ -55,6 +55,8 @@ public class MqttConsumerThread implements Runnable{
     public void StartBrokerConsumer() throws Exception {
         MQTT mqtt = new MQTT();
         mqtt.setHost(ioeConfiguration.getTopic().getMqttUrl());
+        mqtt.setUserName(ioeConfiguration.getTopic().getUsername());
+        mqtt.setPassword(ioeConfiguration.getTopic().getPassword());
         BlockingConnection connection = mqtt.blockingConnection();
         connection.connect();
         List<Topic> topic_list = new ArrayList<>();
@@ -74,7 +76,7 @@ public class MqttConsumerThread implements Runnable{
             ZonedDateTime utcTime = sensorData.getTimestamp().withZoneSameInstant(ZoneOffset.UTC);
             Sensor sensor = sensorRepository.findBySensorId(sensorData.getSensorId());
             // TODO - Read TTL value
-            databaseService.insertData(sensorData.getSensorId(), sensorData.getData(), sensorData.getDescription(), utcTime, StoreTypes.valueOf(sensor.getStoreType()), sensorData.getTopic(), 0);
+            databaseService.insertData(sensorData.getSensorId(), sensorData.getData(), sensorData.getDescription(), utcTime, StoreTypes.valueOf(sensor.getStoreType()), message.getTopic(), 0);
             System.out.println("Received message: " + messageContent);
             message.ack();
         }
