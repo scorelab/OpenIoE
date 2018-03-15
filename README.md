@@ -24,7 +24,8 @@ OpenIoE is an Open-source middleware platform for building, managing, and integr
 # Usage
  - Make sure Cassandra server is up. You can start Cassandra with 'sudo service cassandra start' and stop it with 'sudo service cassandra stop'. Verify that Cassandra is running by invoking nodetool status from the command line.
  - To run the artemis message broker (Broker currenlty supports ActiveMQ Artemis 1.5.x), 
-     - In '/message_broker/etc/artemis.profile' file, change the ArtemisHome directory to match your Apache ActiveMQ Artemis installation directory and java.security.auth.login.config of JAVA_ARGS to match OpenIOE 'message_broker/etc/login.config'. 
+     - In '/message_broker/etc/artemis.profile' file, change the ArtemisHome directory to match your Apache ActiveMQ Artemis installation directory and java.security.auth.login.config of JAVA_ARGS to match OpenIOE 'message_broker/etc/login.config'.
+     - In '/message_broker/etc/bootstrap.xml' file, change the server configuration path to match OpenIOE 'message_broker/etc/broker.xml' file.
      - The executable for running the artemis message broker is found in '/message_broker/bin'. Run `./artemis run` in order to start the broker.
  - Spring Boot is run by 'gradlew' executable in /rest_api. Run `sudo ./gradlew` to start running the application.
  - Open 127.0.0.1 in the web browser where you can configure a user account and create devices, sensors, subscriptions and publications.
