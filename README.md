@@ -1,3 +1,8 @@
+[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/cloudlibz/cloudlibz)
+[![Build Status](https://travis-ci.org/scorelab/OpenIoE.svg?branch=master)](https://travis-ci.org/scorelab/OpenIoE)
+[![GitHub license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://raw.githubusercontent.com/scorelab/OpenIoE/master/LICENSE)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/52edea34ff8943768a8c5a62728f73a7)](https://www.codacy.com/app/hcktheheaven/clocal-gcp?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=hcktheheaven/clocal-gcp&amp;utm_campaign=Badge_Grade)
+
 # OpenIoE
 OpenIoE is an Open-source middleware platform for building, managing, and integrating connected products with the Internet of Everything. It enables you to subscribe to data streams and get data from the sensors and store them. The application was generated using JHipster application generator. 
 
