@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
-export default class List extends Component {
+export default class ListItems extends Component {
   render() {
     const { onClick, completed, text } = this.props;
     return (
