@@ -26,6 +26,13 @@ JNIEXPORT jint JNICALL Java_br_com_dojot_jcrypto_jni_JCrypto_aes_1gcm_1size
 
 JNIEXPORT errno_t JNICALL Java_br_com_dojot_jcrypto_jni_JCrypto_aes_1gcm_1aad
   (JNIEnv *env, jclass clazz, jobject ctx_buf, jbyteArray aad_buf) {
+	  if(result != SUCCESSFULL_OPERATION) {
+		goto FAIL;
+	}
+
+	if(aad_buf == NULL) {
+		goto FAIL;
+	}
 	errno_t result;
 	aes_gcm_ctx_st *ctx = (aes_gcm_ctx_st *) (*env)->GetDirectBufferAddress(env, ctx_buf);
 	unsigned char *aad;
@@ -33,27 +40,23 @@ JNIEXPORT errno_t JNICALL Java_br_com_dojot_jcrypto_jni_JCrypto_aes_1gcm_1aad
 
 	/* Check if context is valid */
 	result = gcmCheckContext(ctx);
-	if(result != SUCCESSFULL_OPERATION) {
-		goto FAIL;
-	}
-
-	if(aad_buf == NULL) {
-		goto FAIL;
-	}
+	
 	aad_len = (int) (*env)->GetArrayLength(env, aad_buf);
         aad = (unsigned char *) (*env)->GetPrimitiveArrayCritical(env, aad_buf, NULL);
 
 	if(aad != NULL)	{
 		/* Updates the authentication tag */
+		result = memset_s(aad, sizeof(unsigned char) * aad_len, 0, sizeof(unsigned char) * aad_len);
+		if(result != SUCCESSFULL_OPERATION) {
+			goto FAIL_CLEAN;
+		}
+		
 		result = aes_gcm_aad(ctx, aad, aad_len);
 		if(result != SUCCESSFULL_OPERATION) {
 			goto FAIL_CLEAN;
 		}
 
-		result = memset_s(aad, sizeof(unsigned char) * aad_len, 0, sizeof(unsigned char) * aad_len);
-		if(result != SUCCESSFULL_OPERATION) {
-			goto FAIL_CLEAN;
-		}
+		
 	} else {
 		result = INVALID_STATE;
 		goto FAIL_CLEAN;
