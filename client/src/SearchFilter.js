@@ -25,7 +25,6 @@ class SearchFilter extends React.Component {
        }
     }
     
-    // put input and display on page
     React.render(
       <SearchFilter />,
       document.getElementById('content') 
