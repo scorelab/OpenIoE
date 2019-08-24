@@ -20,6 +20,7 @@
                 <tr>
                     <th><span translate="global.field.id">ID</span></th>
                     <th><span translate="ioeApp.subscription.subscriptionId">Subscription Id</span></th>
+                    <th><span translate="ioeApp.subscription.topicFilter">Topic Filter</span></th>
                     <th><span translate="ioeApp.subscription.device">Device</span></th>
                     <th><span translate="ioeApp.subscription.sensor">Sensor</span></th>
                     <th><span translate="ioeApp.subscription.user">User</span></th>
@@ -30,6 +31,7 @@
                 <tr ng-repeat="subscription in vm.subscriptions track by subscription.id">
                     <td><a ui-sref="subscription-detail({id:subscription.id})">{{subscription.id}}</a></td>
                     <td>{{subscription.subscriptionId}}</td>
+                    <td>{{subscription.topicFilter}}</td>
                     <td>
                         <a ui-sref="device-detail({id:subscription.device.id})">{{subscription.device.id}}</a>
                     </td>

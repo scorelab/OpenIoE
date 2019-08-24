@@ -44,6 +44,8 @@ public class SubscriptionResourceIntTest {
 
     private static final Long DEFAULT_SUBSCRIPTION_ID = 1L;
     private static final Long UPDATED_SUBSCRIPTION_ID = 2L;
+    private static final String DEFAULT_TOPIC_FILTER = "AAAAA";
+    private static final String UPDATED_TOPIC_FILTER = "BBBBB";
 
     @Inject
     private SubscriptionRepository subscriptionRepository;
@@ -72,6 +74,7 @@ public class SubscriptionResourceIntTest {
     public void initTest() {
         subscription = new Subscription();
         subscription.setSubscriptionId(DEFAULT_SUBSCRIPTION_ID);
+        subscription.setTopicFilter(DEFAULT_TOPIC_FILTER);
     }
 
     @Test
@@ -91,6 +94,7 @@ public class SubscriptionResourceIntTest {
         assertThat(subscriptions).hasSize(databaseSizeBeforeCreate + 1);
         Subscription testSubscription = subscriptions.get(subscriptions.size() - 1);
         assertThat(testSubscription.getSubscriptionId()).isEqualTo(DEFAULT_SUBSCRIPTION_ID);
+        assertThat(testSubscription.getTopicFilter()).isEqualTo(DEFAULT_TOPIC_FILTER);
     }
 
     @Test
@@ -104,7 +108,8 @@ public class SubscriptionResourceIntTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(subscription.getId().intValue())))
-                .andExpect(jsonPath("$.[*].subscriptionId").value(hasItem(DEFAULT_SUBSCRIPTION_ID.intValue())));
+                .andExpect(jsonPath("$.[*].subscriptionId").value(hasItem(DEFAULT_SUBSCRIPTION_ID.intValue())))
+                .andExpect(jsonPath("$.[*].topicFilter").value(hasItem(DEFAULT_TOPIC_FILTER.toString())));
     }
 
     @Test
@@ -118,7 +123,8 @@ public class SubscriptionResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(subscription.getId().intValue()))
-            .andExpect(jsonPath("$.subscriptionId").value(DEFAULT_SUBSCRIPTION_ID.intValue()));
+            .andExpect(jsonPath("$.subscriptionId").value(DEFAULT_SUBSCRIPTION_ID.intValue()))
+            .andExpect(jsonPath("$.topicFilter").value(DEFAULT_TOPIC_FILTER.toString()));
     }
 
     @Test
@@ -140,6 +146,7 @@ public class SubscriptionResourceIntTest {
         Subscription updatedSubscription = new Subscription();
         updatedSubscription.setId(subscription.getId());
         updatedSubscription.setSubscriptionId(UPDATED_SUBSCRIPTION_ID);
+        updatedSubscription.setTopicFilter(UPDATED_TOPIC_FILTER);
 
         restSubscriptionMockMvc.perform(put("/api/subscriptions")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -151,6 +158,7 @@ public class SubscriptionResourceIntTest {
         assertThat(subscriptions).hasSize(databaseSizeBeforeUpdate);
         Subscription testSubscription = subscriptions.get(subscriptions.size() - 1);
         assertThat(testSubscription.getSubscriptionId()).isEqualTo(UPDATED_SUBSCRIPTION_ID);
+        assertThat(testSubscription.getTopicFilter()).isEqualTo(UPDATED_TOPIC_FILTER);
     }
 
     @Test

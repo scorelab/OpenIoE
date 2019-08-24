@@ -1,5 +1,12 @@
 FROM ubuntu:xenial
-
+LABEL multi.org.label-schema.name = "OpenIoE" \
+      multi.org.label-schema.description = "OpenIoE is an Open-source middleware platform for building, managing, and integrating connected products with the Internet of Everything." \
+      multi.org.label-schema.url="https://github.com/scorelab/OpenIoE/blob/master/README.md" \
+      multi.org.label-schema.vcs-url = "https://github.com/scorelab/OpenIoE" \
+      multi.org.label-schema.vcs-ref = "279FA63" \
+      multi.org.label-schema.vendor = "Sustainable Computing Research Group" \
+      multi.org.label-schema.version = "9-december-2017" \
+      multi.org.label-schema.schema-version = "1.0"
 RUN \
   # configure the "jhipster" user
   groupadd jhipster && \
