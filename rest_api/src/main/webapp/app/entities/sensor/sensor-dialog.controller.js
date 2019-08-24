@@ -44,6 +44,6 @@
             vm.isSaving = false;
         }
 
-
+	vm.storeTypes = ['NORMAL','EXPIRE'];
     }
 })();
