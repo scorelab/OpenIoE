@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import EpicMenu from '../EpicMenu';
+import Menu from '../Menu';
 
 class Home extends Comment {
     render() {
-        <EpicMenu />
+        <Menu />
         <ListItems />
         <FooterPage />
     }
