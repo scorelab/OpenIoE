@@ -24,6 +24,34 @@ JNIEXPORT jint JNICALL Java_br_com_dojot_jcrypto_jni_JCrypto_aes_1gcm_1size
 	return sizeof(aes_gcm_ctx_st);
 }
 
+JNIEXPORT errno_t JNICALL Java_br_com_dojot_jcrypto_jni_JCrypto_aes_1init
+  (JNIEnv *env, jclass clazz, jobject ctx_buf, jbyteArray iv_buf, jint mode) {
+	errno_t result;
+	aes_ctx_st *ctx = (aes_ctx_st *) (*env)->GetDirectBufferAddress(env, ctx_buf);
+	size_t len;
+	unsigned char *iv;
+
+	/* If there is any IV, map it to C variable. */
+	if(iv_buf != NULL) {
+		len = (int) (*env)->GetArrayLength(env, iv_buf);
+		iv = (unsigned char *) (*env)->GetPrimitiveArrayCritical(env, iv_buf, NULL);
+	} else {
+		len = 0;
+		iv = NULL;
+	}
+
+	result = aes_init(ctx, iv, len, mode);
+	if(result != SUCCESSFULL_OPERATION) {
+		memset(ctx, 0, sizeof(aes_ctx_st));
+	}
+
+	if(iv_buf != NULL) {
+		(*env)->ReleasePrimitiveArrayCritical(env, iv_buf, iv, JNI_ABORT);
+	}
+
+	return result;
+}
+
 JNIEXPORT errno_t JNICALL Java_br_com_dojot_jcrypto_jni_JCrypto_aes_1gcm_1aad
   (JNIEnv *env, jclass clazz, jobject ctx_buf, jbyteArray aad_buf) {
 	  if(result != SUCCESSFULL_OPERATION) {
@@ -66,6 +94,35 @@ FAIL_CLEAN:
 FAIL:
 	return result;
 }
+/* Performs gcm key expansion, which is the exact same algorithm as aes key expansion but uses a different context */
+JNIEXPORT errno_t JNICALL Java_br_com_dojot_jcrypto_jni_JCrypto_aes_1gcm_1key_1exp
+  (JNIEnv *env, jclass clazz, jobject ctx_buf, jbyteArray key_buf, jint direction) {
+	errno_t result;
+	aes_gcm_ctx_st *ctx = (aes_gcm_ctx_st *) (*env)->GetDirectBufferAddress(env, ctx_buf);
+	size_t len = (int) (*env)->GetArrayLength(env, key_buf);
+	unsigned char *key = (unsigned char *) (*env)->GetPrimitiveArrayCritical(env, key_buf, NULL);
+
+
+	/* Check if there was an error during key access */
+	if(key == NULL) {
+		result = INVALID_PARAMETER;
+		goto FAIL;
+	}
+
+	/* Check if key has the correct length */
+	if(len != AES128_KEY_LEN && len != AES192_KEY_LEN && len != AES256_KEY_LEN) {
+		result = INVALID_PARAMETER;
+		goto FAIL_KEY;
+	}
+
+	aes_gcm_expand_key(ctx, key, len, direction);
+
+	result = SUCCESSFULL_OPERATION;
+FAIL_KEY:
+	(*env)->ReleasePrimitiveArrayCritical(env, key_buf, key, JNI_ABORT);
+FAIL:
+	return result;
+}
 
 JNIEXPORT errno_t JNICALL Java_br_com_dojot_jcrypto_jni_JCrypto_aes_1gcm_1init
   (JNIEnv *env, jclass clazz, jobject ctx_buf, jbyteArray iv_buf, jint tag_len, jint mode) {
@@ -101,33 +158,7 @@ FAIL:
 	return result;
 }
 
-JNIEXPORT errno_t JNICALL Java_br_com_dojot_jcrypto_jni_JCrypto_aes_1init
-  (JNIEnv *env, jclass clazz, jobject ctx_buf, jbyteArray iv_buf, jint mode) {
-	errno_t result;
-	aes_ctx_st *ctx = (aes_ctx_st *) (*env)->GetDirectBufferAddress(env, ctx_buf);
-	size_t len;
-	unsigned char *iv;
 
-	/* If there is any IV, map it to C variable. */
-	if(iv_buf != NULL) {
-		len = (int) (*env)->GetArrayLength(env, iv_buf);
-		iv = (unsigned char *) (*env)->GetPrimitiveArrayCritical(env, iv_buf, NULL);
-	} else {
-		len = 0;
-		iv = NULL;
-	}
-
-	result = aes_init(ctx, iv, len, mode);
-	if(result != SUCCESSFULL_OPERATION) {
-		memset(ctx, 0, sizeof(aes_ctx_st));
-	}
-
-	if(iv_buf != NULL) {
-		(*env)->ReleasePrimitiveArrayCritical(env, iv_buf, iv, JNI_ABORT);
-	}
-
-	return result;
-}
 
 
 JNIEXPORT errno_t JNICALL Java_br_com_dojot_jcrypto_jni_JCrypto_aes_1enc
@@ -290,32 +321,4 @@ FAIL:
 	return result;
 }
 
-/* Performs gcm key expansion, which is the exact same algorithm as aes key expansion but uses a different context */
-JNIEXPORT errno_t JNICALL Java_br_com_dojot_jcrypto_jni_JCrypto_aes_1gcm_1key_1exp
-  (JNIEnv *env, jclass clazz, jobject ctx_buf, jbyteArray key_buf, jint direction) {
-	errno_t result;
-	aes_gcm_ctx_st *ctx = (aes_gcm_ctx_st *) (*env)->GetDirectBufferAddress(env, ctx_buf);
-	size_t len = (int) (*env)->GetArrayLength(env, key_buf);
-	unsigned char *key = (unsigned char *) (*env)->GetPrimitiveArrayCritical(env, key_buf, NULL);
 
-
-	/* Check if there was an error during key access */
-	if(key == NULL) {
-		result = INVALID_PARAMETER;
-		goto FAIL;
-	}
-
-	/* Check if key has the correct length */
-	if(len != AES128_KEY_LEN && len != AES192_KEY_LEN && len != AES256_KEY_LEN) {
-		result = INVALID_PARAMETER;
-		goto FAIL_KEY;
-	}
-
-	aes_gcm_expand_key(ctx, key, len, direction);
-
-	result = SUCCESSFULL_OPERATION;
-FAIL_KEY:
-	(*env)->ReleasePrimitiveArrayCritical(env, key_buf, key, JNI_ABORT);
-FAIL:
-	return result;
-}
