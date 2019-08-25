@@ -1,24 +1,4 @@
 #include "secure-util.h"
-
-errno_t add_s(uint32_t op1, uint32_t op2, uint32_t* res) {
-	errno_t result;
-
-	if(res == NULL) {
-		result = INVALID_PARAMETER;
-		goto FAIL;
-	}
-
-	if(UINT32_MAX - op1 < op2) {
-		result = INVALID_PARAMETER;
-		goto FAIL;
-	}
-
-	*res = op1 + op2;
-	result = SUCCESSFULL_OPERATION;
-FAIL:
-	return result;
-}
-
 errno_t sub_s(uint32_t op1, uint32_t op2, uint32_t* res)
 {
 	errno_t result;
@@ -33,6 +13,35 @@ errno_t sub_s(uint32_t op1, uint32_t op2, uint32_t* res)
 		goto FAIL;
 	}
 	*res = op1 - op2;
+	result = SUCCESSFULL_OPERATION;
+FAIL:
+	return result;
+}
+
+errno_t checkIfValidParameters(const uint8_t* input, uint8_t* output, uint32_t* outputOffset)
+{
+	errno_t result;
+	if(input == NULL || output == NULL || outputOffset == NULL) {
+		result = INVALID_PARAMETER;
+	} else {
+		result = SUCCESSFULL_OPERATION;
+	}
+	return result;
+}
+errno_t add_s(uint32_t op1, uint32_t op2, uint32_t* res) {
+	errno_t result;
+
+	if(res == NULL) {
+		result = INVALID_PARAMETER;
+		goto FAIL;
+	}
+
+	if(UINT32_MAX - op1 < op2) {
+		result = INVALID_PARAMETER;
+		goto FAIL;
+	}
+
+	*res = op1 + op2;
 	result = SUCCESSFULL_OPERATION;
 FAIL:
 	return result;
@@ -79,16 +88,7 @@ FAIL:
 
 
 /* Secure parameters check */
-errno_t checkIfValidParameters(const uint8_t* input, uint8_t* output, uint32_t* outputOffset)
-{
-	errno_t result;
-	if(input == NULL || output == NULL || outputOffset == NULL) {
-		result = INVALID_PARAMETER;
-	} else {
-		result = SUCCESSFULL_OPERATION;
-	}
-	return result;
-}
+
 
 errno_t calculateFullBlocks(uint32_t blockSize, uint32_t bufferOffset, uint32_t inputLen, uint32_t* fullBlocks)
 {
