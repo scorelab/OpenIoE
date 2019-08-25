@@ -1,4 +1,47 @@
 #include "secure-util.h"
+
+/* Secure parameters check */
+
+
+errno_t calculateFullBlocks(uint32_t blockSize, uint32_t bufferOffset, uint32_t inputLen, uint32_t* fullBlocks)
+{
+	errno_t result;
+
+	result = add_s(inputLen, bufferOffset, fullBlocks);
+	if(result != SUCCESSFULL_OPERATION) {
+		goto FAIL;
+	}
+	result = div_s(*fullBlocks, blockSize, fullBlocks);
+	if(result != SUCCESSFULL_OPERATION) {
+		goto FAIL;
+	}
+FAIL:
+	return result;
+}
+errno_t calculateRemainingBytes(uint32_t blockSize, uint32_t bufferOffset, uint32_t inputLen, uint32_t fullBlocks, uint32_t* remainingBytes)
+{
+	errno_t result;
+	uint32_t aux;
+
+	result = mul_s(blockSize, fullBlocks, remainingBytes);
+	if(result != SUCCESSFULL_OPERATION) {
+		goto FAIL;
+	}
+
+	result = add_s(inputLen, bufferOffset, &aux);
+	if(result != SUCCESSFULL_OPERATION) {
+		goto FAIL;
+	}
+
+	result = sub_s(aux, *remainingBytes, remainingBytes);
+	if(result != SUCCESSFULL_OPERATION) {
+		goto FAIL;
+	}
+FAIL:
+	return result;
+}
+
+
 errno_t sub_s(uint32_t op1, uint32_t op2, uint32_t* res)
 {
 	errno_t result;
@@ -15,6 +58,21 @@ errno_t sub_s(uint32_t op1, uint32_t op2, uint32_t* res)
 	*res = op1 - op2;
 	result = SUCCESSFULL_OPERATION;
 FAIL:
+	return result;
+}
+
+/* Constant-time comparison  */
+uint8_t memcmp_s(const void* ptr1, const void* ptr2, uint32_t num)
+{
+	uint32_t i;
+	uint8_t result = 0x00;	
+	uint8_t* p1 = (uint8_t*) ptr1;
+	uint8_t* p2 = (uint8_t*) ptr2;
+
+	for(i = 0; i < num; i++) {
+		result |= p1[i] ^ p2[i];
+	}
+
 	return result;
 }
 
@@ -87,46 +145,7 @@ FAIL:
 }
 
 
-/* Secure parameters check */
 
-
-errno_t calculateFullBlocks(uint32_t blockSize, uint32_t bufferOffset, uint32_t inputLen, uint32_t* fullBlocks)
-{
-	errno_t result;
-
-	result = add_s(inputLen, bufferOffset, fullBlocks);
-	if(result != SUCCESSFULL_OPERATION) {
-		goto FAIL;
-	}
-	result = div_s(*fullBlocks, blockSize, fullBlocks);
-	if(result != SUCCESSFULL_OPERATION) {
-		goto FAIL;
-	}
-FAIL:
-	return result;
-}
-errno_t calculateRemainingBytes(uint32_t blockSize, uint32_t bufferOffset, uint32_t inputLen, uint32_t fullBlocks, uint32_t* remainingBytes)
-{
-	errno_t result;
-	uint32_t aux;
-
-	result = mul_s(blockSize, fullBlocks, remainingBytes);
-	if(result != SUCCESSFULL_OPERATION) {
-		goto FAIL;
-	}
-
-	result = add_s(inputLen, bufferOffset, &aux);
-	if(result != SUCCESSFULL_OPERATION) {
-		goto FAIL;
-	}
-
-	result = sub_s(aux, *remainingBytes, remainingBytes);
-	if(result != SUCCESSFULL_OPERATION) {
-		goto FAIL;
-	}
-FAIL:
-	return result;
-}
 
 /* CERT Solution for memory sanitization. It should prevent compiler optimizations, but it isn't guaranteed to work. */
 errno_t memset_s(void *v, uint32_t smax, uint8_t c, uint32_t n)
@@ -147,17 +166,4 @@ FAIL:
 	return result;
 }
 
-/* Constant-time comparison  */
-uint8_t memcmp_s(const void* ptr1, const void* ptr2, uint32_t num)
-{
-	uint32_t i;
-	uint8_t result = 0x00;	
-	uint8_t* p1 = (uint8_t*) ptr1;
-	uint8_t* p2 = (uint8_t*) ptr2;
 
-	for(i = 0; i < num; i++) {
-		result |= p1[i] ^ p2[i];
-	}
-
-	return result;
-}
