@@ -45,6 +45,33 @@ public class TokenProvider {
             1000 * jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSecondsForRememberMe();
     }
 
+
+    public Authentication getAuthentication(String token) {
+        Claims claims = Jwts.parser()
+            .setSigningKey(secretKey)
+            .parseClaimsJws(token)
+            .getBody();
+
+        Collection<? extends GrantedAuthority> authorities =
+            Arrays.asList(claims.get(AUTHORITIES_KEY).toString().split(",")).stream()
+                .map(authority -> new SimpleGrantedAuthority(authority))
+                .collect(Collectors.toList());
+
+        User principal = new User(claims.getSubject(), "",
+            authorities);
+
+        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+    }
+    public boolean validateToken(String authToken) {
+        try {
+            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(authToken);
+            return true;
+        } catch (SignatureException e) {
+            log.info("Invalid JWT signature: " + e.getMessage());
+            return false;
+        }
+    }
+
     public String createToken(Authentication authentication, Boolean rememberMe) {
         String authorities = authentication.getAuthorities().stream()
             .map(authority -> authority.getAuthority())
@@ -66,30 +93,4 @@ public class TokenProvider {
             .compact();
     }
 
-    public Authentication getAuthentication(String token) {
-        Claims claims = Jwts.parser()
-            .setSigningKey(secretKey)
-            .parseClaimsJws(token)
-            .getBody();
-
-        Collection<? extends GrantedAuthority> authorities =
-            Arrays.asList(claims.get(AUTHORITIES_KEY).toString().split(",")).stream()
-                .map(authority -> new SimpleGrantedAuthority(authority))
-                .collect(Collectors.toList());
-
-        User principal = new User(claims.getSubject(), "",
-            authorities);
-
-        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
-    }
-
-    public boolean validateToken(String authToken) {
-        try {
-            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(authToken);
-            return true;
-        } catch (SignatureException e) {
-            log.info("Invalid JWT signature: " + e.getMessage());
-            return false;
-        }
-    }
 }
