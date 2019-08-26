@@ -133,9 +133,7 @@ JNIEXPORT errno_t JNICALL Java_br_com_dojot_jcrypto_jni_JCrypto_aes_1gcm_1init
 
 	/* Check if context is valid */
 	result = gcmCheckContext(ctx);
-	if(result != SUCCESSFULL_OPERATION) {
-		goto FAIL;
-	}
+
 
 	/* If there is any IV, maps it to C variable */
 	if(iv_buf != NULL) {
@@ -148,6 +146,10 @@ JNIEXPORT errno_t JNICALL Java_br_com_dojot_jcrypto_jni_JCrypto_aes_1gcm_1init
 	/* If there is no IV then something is wrong */
 	} else {
 		result = INVALID_PARAMETER;
+		goto FAIL;
+	}
+
+		if(result != SUCCESSFULL_OPERATION) {
 		goto FAIL;
 	}
 
