@@ -6,4 +6,8 @@ import javax.ejb.Local;
 public interface ConfigDAO {
 	
 	String findParameterByKey(String key);
+
+	void remove(String key);
+	
+	String get(String key);
 }

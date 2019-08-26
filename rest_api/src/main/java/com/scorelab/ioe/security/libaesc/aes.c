@@ -8,14 +8,6 @@
 #include <emmintrin.h>
 #include <tmmintrin.h>
 
-
-/*============================================================================*/
-/* Private definitions                                                        */
-/*============================================================================*/
-
-/*============================================================================*/
-/* Public definitions                                                         */
-/*============================================================================*/
 errno_t aes_init(aes_ctx_t ctx, uint8_t *iv, uint32_t iv_len, uint8_t mode) {
 	errno_t result;
 	
@@ -285,26 +277,7 @@ void aes_decrypt(aes_ctx_t ctx, uint8_t *output, uint32_t max_output_size, uint8
 	}
 }
 
-void aes_gcm_expand_key(aes_gcm_ctx_t ctx, uint8_t *key, uint32_t len, int direction) {
-	ctx->aes->direction = direction;
-	ctx->aes->keysize = len;
-	switch(len) {
-		case AES128_KEY_LEN:
-			ctx->aes->Nb = 4;
-			ctx->aes->Nr = 10;
-			break;
-		case AES192_KEY_LEN:
-			ctx->aes->Nb = 4;
-			ctx->aes->Nr = 12;
-			break;
-		case AES256_KEY_LEN:
-			ctx->aes->Nb = 4;
-			ctx->aes->Nr = 14;
-			break;
-	}
-	// It never uses decryption
-	intel_aes_init(1, len, ctx->aes);
-}
+
 
 
 void aes_expand_key(aes_ctx_t ctx, uint8_t *key, uint32_t len, uint8_t direction) {
@@ -364,6 +337,27 @@ errno_t aesCheckContext(aes_ctx_t ctx)
 	result = SUCCESSFULL_OPERATION;
 FAIL:
 	return result;
+}
+
+void aes_gcm_expand_key(aes_gcm_ctx_t ctx, uint8_t *key, uint32_t len, int direction) {
+	ctx->aes->direction = direction;
+	ctx->aes->keysize = len;
+	switch(len) {
+		case AES128_KEY_LEN:
+			ctx->aes->Nb = 4;
+			ctx->aes->Nr = 10;
+			break;
+		case AES192_KEY_LEN:
+			ctx->aes->Nb = 4;
+			ctx->aes->Nr = 12;
+			break;
+		case AES256_KEY_LEN:
+			ctx->aes->Nb = 4;
+			ctx->aes->Nr = 14;
+			break;
+	}
+	// It never uses decryption
+	intel_aes_init(1, len, ctx->aes);
 }
 
 errno_t gcmCheckContext(aes_gcm_ctx_t ctx)
