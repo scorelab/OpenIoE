@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './EpicMenu.css';
 import searchIcon from './search-icon.png';
 
-class EpicMenu extends Component {
+class Menu extends Component {
     constructor() {
         super();
 
@@ -60,4 +60,4 @@ class EpicMenu extends Component {
     }
 }
 
-export default EpicMenu;
+export default Menu;

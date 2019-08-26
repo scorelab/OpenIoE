@@ -9,6 +9,9 @@ export default class AddToList extends Component {
         <button onClick={ e => this.handleClick(e) }>
           Add
         </button>
+        <button onClick={ e => this.handleReset(e) }>
+          Reset
+        </button>
       </div>
     );
   }
@@ -17,6 +20,13 @@ export default class AddToList extends Component {
     const inputNode = findDOMNode(this.refs.input);
     const text = inputNode.value.trim();
     this.props.onAddClick(text);
+    inputNode.value = '';
+  }
+
+  handleReset(e) {
+    const inputNode = findDOMNode(this.refs.input);
+    const text = "";
+    this.props.onResetClick(text);
     inputNode.value = '';
   }
 }

@@ -140,3 +140,63 @@
   padding-bottom: 2px;
   margin-left: 5px;
 }
+
+body {
+  font-family: 'Arial';
+}
+
+h1 {
+  text-align: center;
+}
+
+.textBox{
+position: relative;
+display: block;
+margin: 20px auto;
+width: 50%;
+}
+
+.List {
+  position: relative;
+  margin: auto;
+  min-width: 400px;
+  width: 30%;
+  list-style: none;
+}
+
+  .List li {
+      margin: 5px;
+      width: 100%;
+  }
+
+  .List a {
+      display: inline-block;
+      text-decoration: none;
+      background-color: #2EC4B6;
+      color: white;
+      padding: 15px 5%;
+      border-radius: 8px 0 0 8px;
+      width: 60%;
+      font-weight: bold;
+      border-left: 2px solid #333;
+      border-top: 2px solid #333;
+      border-bottom: 2px solid #333;
+  }
+
+  .List li > a:hover, .List div:hover {
+      background-color: #FF9F1C;
+  }
+
+  .List div {
+      display: inline-block;
+      text-align: center;
+      cursor: pointer;
+      color: white;
+      border-radius: 0 8px 8px 0;
+      background-color: #1E90FF;
+      width: 20%;
+      padding: 15px 4%;
+      border-right: 2px solid #333;
+      border-top: 2px solid #333;
+      border-bottom: 2px solid #333;
+  }
