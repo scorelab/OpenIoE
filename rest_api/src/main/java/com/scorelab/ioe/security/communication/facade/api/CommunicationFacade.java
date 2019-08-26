@@ -11,13 +11,13 @@ public interface CommunicationFacade {
 	
 	LinkedHashMap<String, Object> requestNodeConfigs();
 	
+	String post(String target, String find, LinkedHashMap<String, Object> microservice, LinkedHashMap<String, Object> parameters) throws InvalidResponseException;
+
+	String get(String target, String find, LinkedHashMap<String, Object> microservice) throws InvalidResponseException;
+
 	String get(String server, String path) throws InvalidResponseException;
 	
-	String get(String target, String find, LinkedHashMap<String, Object> microservice) throws InvalidResponseException;
-	
 	String post(String server, String path, LinkedHashMap<String, Object> parameters) throws InvalidResponseException;
-
-	String post(String target, String find, LinkedHashMap<String, Object> microservice, LinkedHashMap<String, Object> parameters) throws InvalidResponseException;
 
 	String requestKafkaBrokers();
 }
