@@ -20,12 +20,19 @@ import com.scorelab.ioe.security.communication.service.impl.POSTServiceBean;
 import com.scorelab.ioe.security.communication.service.impl.RedisSentinelServiceBean;
 
 public class CommunicationFacadeBean implements CommunicationFacade {
-	@Override
-	public String requestKafkaBrokers() {
-		KafkaBrokersService kafkaBrokersService = new KafkaBrokersServiceBean();
-		return kafkaBrokersService.requestKafkaBrokers();
-	}
+
 	
+	@Override
+	public String post(String target, String find, LinkedHashMap<String, Object> microservice, LinkedHashMap<String, Object> parameters) throws InvalidResponseException {
+		JSONObject service = new JSONObject(post(target, find, microservice));
+		return post(service.getString("target"), service.getString("path"), parameters);
+	}
+	@Override
+	public String get(String server, String path) throws InvalidResponseException {
+		GETService getService = new GETServiceBean();
+		return getService.get(server, path);
+	}
+
 	@Override
 	public Set<String> requestRedisSentinelsHosts() {
 		RedisSentinelService redisSentinelService = new RedisSentinelServiceBean();
@@ -39,26 +46,22 @@ public class CommunicationFacadeBean implements CommunicationFacade {
 	}
 
 	@Override
-	public String get(String server, String path) throws InvalidResponseException {
-		GETService getService = new GETServiceBean();
-		return getService.get(server, path);
+	public String requestKafkaBrokers() {
+		KafkaBrokersService kafkaBrokersService = new KafkaBrokersServiceBean();
+		return kafkaBrokersService.requestKafkaBrokers();
 	}
 	
-	@Override
-	public String get(String target, String find, LinkedHashMap<String, Object> microservice) throws InvalidResponseException {
-		JSONObject service = new JSONObject(post(target, find, microservice));
-		return get(service.getString("target"), service.getString("path"));
-	}
-
 	@Override
 	public String post(String server, String path, LinkedHashMap<String, Object> parameters) throws InvalidResponseException {
 		POSTService postService = new POSTServiceBean();
 		return postService.post(server, path, parameters);
 	}
 
+	
+	
 	@Override
-	public String post(String target, String find, LinkedHashMap<String, Object> microservice, LinkedHashMap<String, Object> parameters) throws InvalidResponseException {
+	public String get(String target, String find, LinkedHashMap<String, Object> microservice) throws InvalidResponseException {
 		JSONObject service = new JSONObject(post(target, find, microservice));
-		return post(service.getString("target"), service.getString("path"), parameters);
+		return get(service.getString("target"), service.getString("path"));
 	}
 }
