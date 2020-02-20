@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './EpicMenu.css';
+import './Menu.css';
 import searchIcon from './search-icon.png';
 
 class Menu extends Component {
@@ -28,8 +28,8 @@ class Menu extends Component {
             let linkMarkup = link.active ? (
                 <a className="menu__link menu__link--active" href={link.link}>{link.label}</a>
             ) : (
-                <a className="menu__link" href={link.link}>{link.label}</a>
-            );
+                    <a className="menu__link" href={link.link}>{link.label}</a>
+                );
 
             return (
                 <li key={index} className="menu__list-item">
@@ -41,7 +41,8 @@ class Menu extends Component {
         return (
             <nav className="menu">
                 <h1 style={{
-                backgroundImage: 'url(' + this.props.logo + ')'
+                    backgroundImage: 'url(' + this.props.logo + ')',
+                    width: '120px'
                 }} className="menu__logo">Epic Co.</h1>
 
                 <div className="menu__right">
@@ -50,7 +51,7 @@ class Menu extends Component {
                     </ul>
 
                     <button onClick={this.showForm.bind(this)} style={{
-                    backgroundImage: 'url(' + searchIcon + ')'
+                        backgroundImage: 'url(' + searchIcon + ')'
                     }} className="menu__search-button"></button>
 
                     {searchForm}

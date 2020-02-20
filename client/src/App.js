@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import EpicMenu from './EpicMenu';
+import Menu from './Menu';
 
 import logo from './logo.png';
 class App extends Component {
@@ -13,7 +13,7 @@ class App extends Component {
 
     return (
       <div className="container center">
-        <EpicMenu links={links} logo={logo} />
+        <Menu links={links} logo={logo} />
       </div>
     );
   }
